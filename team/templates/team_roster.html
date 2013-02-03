@@ -50,9 +50,9 @@
                           </th>
                       </tr>
                <{foreach item=teamplayer from=$players}>
-                      <tr class=<{$teamplayer.class}> >
+                      <tr class="<{$teamplayer.class}>" >
                           <td>
-                              <img src='<{$XOOPS_URL}>/uploads/<{$teamplayer.avatar}>' alt='<{$teamplayer.bio}>' width='45'>
+                              <img src='<{$xoops_url}>/uploads/<{$teamplayer.avatar}>' alt='<{$teamplayer.bio}>' width='45'>
                           </td>
                           <td>
                               <a href='profile.php?uid=<{$teamplayer.uid}>' target='_self'><{$teamplayer.uname}></a>
@@ -67,7 +67,7 @@
                               <{/if}>
                           </td>
                           <td>
-                              <font color=<{$teamplayer.rankcolor}>><{$teamplayer.rank}></font>
+                              <font color="<{$teamplayer.rankcolor}>"><{$teamplayer.rank}></font>
                           </td>
                           <td>
                               <{$teamplayer.JoinedDate}>
@@ -80,14 +80,11 @@
                       </tr>
                <{/foreach}>
                       <tr class='outer'>
-                          <td colspan='5'>
+                          <td colspan='6'>
                               <{$lang_teamtotalmembers}> <b><{$count}></b> -
                               <font color='<{$goodcolor}>'>
                               <{$lang_teamactiveplayers}> <b><{$actives}></b>
                               </font>
-                          </td>
-                          <td>
-                              v<{$teamversion}>
                           </td>
                       </tr>
                </table>

@@ -1,5 +1,5 @@
 <?php
-// $Id: navmenu.php,v 1.2 2004/01/09 22:24:58 mithyt2 Exp $
+// $Id: navmenu.php,v 1.4 2006/06/09 14:32:47 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -36,9 +36,11 @@ function sh_navmenu() {
     $block = array();
     $block['title'] = _BL_TEAMMENU;
     $block['content']  = "<table border='0' cellspacing='1'><tr><td id='mainmenu'>";
-    $sql = "SELECT * FROM ".$xoopsDB->prefix("team_team")." ORDER BY defteam DESC, teamname ASC";
-    $result= $xoopsDB->query($sql);
-    while ($myrow = $xoopsDB->fetchArray($result)) {
+    $team_handler = xoops_getmodulehandler('team', 'team');
+    $criteria = new CriteriaCompo();
+    $criteria->setSort("defteam DESC, teamname");
+    $teams = $team_handler->getObjects($criteria, false, false);
+    foreach ($teams as $myrow) {
         $teamid = $myrow["teamid"];
         $teamname = $myrow["teamname"];
         $teamtype = $myrow["teamtype"];

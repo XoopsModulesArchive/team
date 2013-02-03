@@ -6,10 +6,10 @@
 
 <table width="70%" align="center" border="0">
   <tr align="center">
-    <td><input type="button" value="<{$smarty.const._US_EDITPROFILE}>" onclick="location='../../edituser.php'" />
-    <input type="button" value="<{$smarty.const._US_AVATAR}>" onclick="location='../../edituser.php?op=avatarform'" />
-    <input type="button" value="<{$smarty.const._US_INBOX}>" onclick="location='../../viewpmsg.php'" />
-    <input type="button" value="<{$smarty.const._US_LOGOUT}>" onclick="location='../../user.php?op=logout'" /></td>
+    <td><input type="button" value="<{$smarty.const._AM_TEAM_EDITPROFILE}>" onclick="location='../../edituser.php'" />
+    <input type="button" value="<{$smarty.const._AM_TEAM_AVATAR}>" onclick="location='../../edituser.php?op=avatarform'" />
+    <input type="button" value="<{$smarty.const._AM_TEAM_INBOX}>" onclick="location='../../viewpmsg.php'" />
+    <input type="button" value="<{$smarty.const._AM_TEAM_LOGOUT}>" onclick="location='../../user.php?op=logout'" /></td>
   </tr>
 </table>
 </form>
@@ -24,55 +24,55 @@
           <th colspan="2" align="center"><{$lang_allaboutuser}></th>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_AVATAR}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_AVATAR}></td>
           <td align="center" class="even"><img src="<{$user_avatarurl}>" alt="Avatar" /></td>
         </tr>
         <tr>
-          <td class="head"><{$smarty.const._US_REALNAME}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_REALNAME}></td>
           <td align="center" class="odd"><{$user_realname}></td>
         </tr>
         <tr>
-          <td class="head"><{$smarty.const._US_WEBSITE}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_WEBSITE}></td>
           <td class="even"><{$user_websiteurl}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_EMAIL}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_EMAIL}></td>
           <td class="odd"><{$user_email}></td>
         </tr>
 	<tr valign="top">
-          <td class="head"><{$smarty.const._US_PM}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_PM}></td>
           <td class="even"><{$user_pmlink}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_ICQ}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_ICQ}></td>
           <td class="odd"><{$user_icq}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_AIM}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_AIM}></td>
           <td class="even"><{$user_aim}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_YIM}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_YIM}></td>
           <td class="odd"><{$user_yim}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_MSNM}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_MSNM}></td>
           <td class="even"><{$user_msnm}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_LOCATION}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_LOCATION}></td>
           <td class="odd"><{$user_location}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_OCCUPATION}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_OCCUPATION}></td>
           <td class="even"><{$user_occupation}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_INTEREST}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_INTEREST}></td>
           <td class="odd"><{$user_interest}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_EXTRAINFO}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_EXTRAINFO}></td>
           <td class="even"><{$user_extrainfo}></td>
         </tr>
       </table>
@@ -80,29 +80,29 @@
     <td width="50%">
       <table class="outer" cellpadding="4" cellspacing="1" width="100%">
         <tr valign="top">
-          <th colspan="2" align="center"><{$smarty.const._US_STATISTICS}></th>
+          <th colspan="2" align="center"><{$smarty.const._AM_TEAM_STATISTICS}></th>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_MEMBERSINCE}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_MEMBERSINCE}></td>
           <td align="center" class="even"><{$user_joindate}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_RANK}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_RANK}></td>
           <td align="center" class="odd"><{$user_rankimage}><br /><{$user_ranktitle}></td>
         </tr>
         <tr valign="top">
-          <td class="head"><{$smarty.const._US_POSTS}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_POSTS}></td>
           <td align="center" class="even"><{$user_posts}></td>
         </tr>
 	<tr valign="top">
-          <td class="head"><{$smarty.const._US_LASTLOGIN}></td>
+          <td class="head"><{$smarty.const._AM_TEAM_LASTLOGIN}></td>
           <td align="center" class="odd"><{$user_lastlogin}></td>
         </tr>
       </table>
       <br />
       <table class="outer" cellpadding="4" cellspacing="1" width="100%">
         <tr valign="top">
-          <th colspan="2" align="center"><{$smarty.const._US_SIGNATURE}></th>
+          <th colspan="2" align="center"><{$smarty.const._AM_TEAM_SIGNATURE}></th>
         </tr>
         <tr valign="top">
           <td class="even"><{$user_signature}></td>
@@ -167,13 +167,13 @@
        <{if $newmatches == true}>
             <tr class='head'><td><{$smarty.const._AM_TEAMPENDMATCH}></td><td><{$smarty.const._AM_TEAMTEAM}></td><td><{$smarty.const._AM_TEAMOPPONENT}></td><td><{$smarty.const._AM_TEAMMATCHTYPE}></td><td><{$smarty.const._AM_TEAMRESULT}></td><td><{$smarty.const._AM_TEAMAVAILABILITY}></td><tr>
             <{foreach item=thismatch from=$thismatch}>
-                      <tr class=<{$thismatch.class}>><td><{$thismatch.date}></td><td><{$thismatch.teamname}></td><td><a href='matchdetails.php?mid=<{$thismatch.matchid}>'><{$thismatch.opponent}></a></td><td><{$thismatch.size}> <{$thismatch.vs}> <{$thismatch.size}> <{$thismatch.type}></td><td><{$thismatch.result}></td><td><a href='availability.php?mid=<{$thismatch.matchid}>'><{$thismatch.availability}></a></td></tr>
+                      <tr class="<{$thismatch.class}>"><td><{$thismatch.date}></td><td><{$thismatch.teamname}></td><td><a href='matchdetails.php?mid=<{$thismatch.matchid}>'><{$thismatch.opponent}></a></td><td><{$thismatch.size}> <{$thismatch.vs}> <{$thismatch.size}> <{$thismatch.type}></td><td><{$thismatch.result}></td><td><a href='availability.php?mid=<{$thismatch.matchid}>'><{$thismatch.availability}></a></td></tr>
             <{/foreach}>
        <{/if}>
        <{if $prevmatches == true}>
             <tr class='head'><td><{$smarty.const._AM_TEAMPREVMATCHES}></td><td><{$smarty.const._AM_TEAMTEAM}></td><td><{$smarty.const._AM_TEAMOPPONENT}></td><td><{$smarty.const._AM_TEAMMATCHTYPE}></td><td><{$smarty.const._AM_TEAMRESULT}></td><td><{$smarty.const._AM_TEAMAVAILABILITY}></td><tr>
             <{foreach item=thismatch from=$prevmatch}>
-                      <tr class=<{$thismatch.class}>><td><{$thismatch.date}></td><td><{$thismatch.teamname}></td><td><a href='matchdetails.php?mid=<{$thismatch.matchid}>'><{$thismatch.opponent}></a></td><td><{$thismatch.size}> <{$smarty.const._AM_TEAMVERSUS}> <{$thismatch.size}> <{$thismatch.type}></td><td><{$thismatch.result}></td><td><a href='availability.php?mid=<{$thismatch.matchid}>'><{$thismatch.availability}></a></td></tr>
+                      <tr class="<{$thismatch.class}>"><td><{$thismatch.date}></td><td><{$thismatch.teamname}></td><td><a href='matchdetails.php?mid=<{$thismatch.matchid}>'><{$thismatch.opponent}></a></td><td><{$thismatch.size}> <{$smarty.const._AM_TEAMVERSUS}> <{$thismatch.size}> <{$thismatch.type}></td><td><{$thismatch.result}></td><td><a href='availability.php?mid=<{$thismatch.matchid}>'><{$thismatch.availability}></a></td></tr>
             <{/foreach}>
        <{/if}>
   <{/if}>

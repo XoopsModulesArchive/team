@@ -1,8 +1,7 @@
 <?php
 include '../../../include/cp_header.php';
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/functions.php';
-include('functions.php');
+include_once('./functions.php');
 
 $op = isset($_GET['op']) ? $_GET['op'] : 'default';
 $teamid = isset($_GET['teamid']) ? intval($_GET['teamid']) : 'default';
@@ -13,7 +12,8 @@ if (isset($_POST)) {
 }
 
 xoops_cp_header();
-$team = new Team($teamid);
+$team_handler =& xoops_getmodulehandler('team');
+$team =& $team_handler->get($teamid);
 switch ($op) {
     case "addmember":
          $success=0;
@@ -135,7 +135,7 @@ switch ($op) {
          }
          redirect_header("teamadmin.php?teamid=".$teamid,3,$feedback);
          break;
-         
+
     case "delsize":
          $success=0;
          $failure=0;
@@ -153,7 +153,7 @@ switch ($op) {
          }
          redirect_header("teamadmin.php?teamid=".$teamid,3,$feedback);
          break;
-         
+
     case "addside":
          $success=0;
          $failure=0;
@@ -243,7 +243,7 @@ switch ($op) {
          }
          redirect_header("teamadmin.php?teamid=".$teamid,3,$feedback);
          break;
-         
+
     case "delpos":
          $success=0;
          $failure=0;
@@ -261,7 +261,7 @@ switch ($op) {
          }
          redirect_header("teamadmin.php?teamid=".$teamid,3,$feedback);
          break;
-         
+
     case "addskill":
          $success=0;
          $failure=0;
@@ -347,15 +347,15 @@ switch ($op) {
          teamTableOpen();
          echo "<td colspan=2>";
          include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
-         $tform = new XoopsThemeForm(""._AM_TEAMOPTIONSFOR." ".$team->teamname(), "editteam", "index.php");
+         $tform = new XoopsThemeForm(""._AM_TEAMOPTIONSFOR." ".$team->getVar('teamname'), "editteam", "index.php");
          $op_hidden = new XoopsFormHidden('op', "saveteam");
          $submit = new XoopsFormButton('', 'submit', 'Edit', 'submit');
          $action_hidden = new XoopsFormHidden('submit', "Edit");
          $teamid_hidden = new XoopsFormHidden('teamid', $teamid);
          $button_tray = new XoopsFormElementTray('' ,'');
-         $name = new XoopsFormText(_AM_TEAMNAME, 'name', 20, 20, $team->teamname(), 'E');
-         $type = new XoopsFormText(_AM_TEAMTYPE, 'type', 20, 20, $team->teamtype(), 'E');
-         $maps_select = new XoopsFormSelect(_AM_TEAMMAPSPERMATCH, 'maps', $team->maps());
+         $name = new XoopsFormText(_AM_TEAMNAME, 'name', 20, 20, $team->getVar('teamname'), 'E');
+         $type = new XoopsFormText(_AM_TEAMTYPE, 'type', 20, 20, $team->getVar('teamtype'), 'E');
+         $maps_select = new XoopsFormSelect(_AM_TEAMMAPSPERMATCH, 'maps', $team->getVar('maps'));
          for ($i=1; $i <=5; $i++) {
              $maps_select->addOption($i);
          }
@@ -413,7 +413,7 @@ switch ($op) {
          $ops[0] = "addskill";
          $ops[1] = "delskill";
          $lang[0] = _AM_TEAMNONSELECTED;
-         $lang[1] = _AM_TEAMPOSITIONSELECTION;
+         $lang[1] = _AM_TEAMPOSITIONSKILLSELECTION;
          $lang[2] = _AM_TEAMSELECTED;
          teamItemManage($noskills, $skills, $teamid, $ops, $select, $lang);
 

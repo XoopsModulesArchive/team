@@ -1,5 +1,5 @@
 <?php
-// $Id: xoops_version.php,v 1.8 2004/03/21 15:28:18 mithyt2 Exp $
+// $Id: xoops_version.php,v 1.12 2006/09/02 09:00:52 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -25,7 +25,8 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
 $modversion['name'] = _MI_MATCH_NAME;
-$modversion['version'] = 2.08;
+$modversion['version'] = 3.01;
+$modversion['versionstatus'] = "Full";
 $modversion['description'] = _MI_MATCH_DESC;
 $modversion['credits'] = "The XOOPS Project";
 $modversion['help'] = "team.html";
@@ -42,36 +43,38 @@ $modversion['sqlfile']['mysql'] = "sql/mysql.sql";
 
 // Tables created by sql file (without prefix!)
 $modversion['tables'][0] = "team_availability";
-$modversion['tables'][1] = "team_layout";
-$modversion['tables'][2] = "team_ladders";
+$modversion['tables'][1] = "team_layout"; //Move to module config
+$modversion['tables'][2] = "team_ladders"; //No class
 $modversion['tables'][3] = "team_lineups_positions";
 $modversion['tables'][4] = "team_mappool";
 $modversion['tables'][5] = "team_matches";
 $modversion['tables'][6] = "team_matchmaps";
-$modversion['tables'][7] = "team_positions";
-$modversion['tables'][8] = "team_rank";
-$modversion['tables'][9] = "team_server";
-$modversion['tables'][10] = "team_sides";
-$modversion['tables'][11] = "team_sizes";
-$modversion['tables'][12] = "team_skills";
-$modversion['tables'][13] = "team_status";
+$modversion['tables'][7] = "team_positions"; //No class
+$modversion['tables'][8] = "team_rank"; //No class
+$modversion['tables'][9] = "team_server"; //No class
+$modversion['tables'][10] = "team_sides"; //No class
+$modversion['tables'][11] = "team_sizes"; //No class
+$modversion['tables'][12] = "team_skills"; //No class
+$modversion['tables'][13] = "team_status"; //No class
 $modversion['tables'][14] = "team_tactics";
 $modversion['tables'][15] = "team_tactics_positions";
 $modversion['tables'][16] = "team_team";
-$modversion['tables'][17] = "team_teamladders";
-$modversion['tables'][18] = "team_teammaps";
-$modversion['tables'][19] = "team_teampositions";
-$modversion['tables'][20] = "team_teamservers";
-$modversion['tables'][21] = "team_teamstatus";
-$modversion['tables'][22] = "team_teamsides";
-$modversion['tables'][23] = "team_teamsizes";
-$modversion['tables'][24] = "team_teamrank";
+$modversion['tables'][17] = "team_teamladders"; //No class
+$modversion['tables'][18] = "team_teammaps"; //No class
+$modversion['tables'][19] = "team_teampositions"; //No class
+$modversion['tables'][20] = "team_teamservers"; //No class
+$modversion['tables'][21] = "team_teamstatus"; //No class
+$modversion['tables'][22] = "team_teamsides"; //No class
+$modversion['tables'][23] = "team_teamsizes"; //No class
+$modversion['tables'][24] = "team_teamrank"; //No class
 
 
 // Admin things
 $modversion['hasAdmin'] = 1;
 $modversion['adminindex'] = "admin/index.php";
 $modversion['adminmenu'] = "admin/menu.php";
+
+$modversion['onUpdate'] = "include/update.php";
 
 // Blocks
 $modversion['blocks'][1]['file'] = "availability.php";
@@ -102,6 +105,8 @@ $modversion['templates'][8]['file'] = 'team_avstats.html';
 $modversion['templates'][8]['description'] = 'Availability Statistics';
 $modversion['templates'][9]['file'] = 'team_positions.html';
 $modversion['templates'][9]['description'] = 'Position Tables';
+$modversion['templates'][10]['file'] = 'team_tactics_list.html';
+$modversion['templates'][10]['description'] = 'Tactics list table';
 
 // Menu
 $modversion['hasMain'] = 1;

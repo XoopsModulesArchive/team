@@ -1,3 +1,11 @@
+--- v3.01 ---
+> Bugfix in screenshot deletion (Mithrandir/Bilco105)
+> Removed screenshot upload from match creation (Mithrandir)
+> Bugfix in player profile, availabilities listing corrupted team name (Mithrandir)
+
+--- v3.00 ---
+> - Extensive changes in the object model (Mithrandir)
+
 --- v2.08 ---
 > - Fixed missing mapname when adding/editing tactics (tactics.php, class/tactics.php) (Mithrandir)
 
@@ -33,7 +41,7 @@ need to be CHMOD'ed to 777
 --- v1.33 ---
 For upgrade from 1.3x run these SQL commands in your SQL database management tool (PHPMyAdmin or similar):
 
-ALTER TABLE `team_matches` 
+ALTER TABLE `team_matches`
 ADD `customserver` TEXT DEFAULT NULL ,
 ADD `review` TEXT;
 
@@ -68,27 +76,27 @@ Changes 18.11.2003 - Jace
 > ===================
 > - added field 'customserver' (text) to table team_matches
 > - changed sql script to include the database changes
-> - when editing a match you can choose 'Custom Server' from 
-> the list of servers and enter a custom server ip/description 
-> in a textfield below. in this case 0 is saved as serverid of 
-> the match and the value of the textfield is saved in field 
-> 'customserver'. If a server from list is selected, field 
+> - when editing a match you can choose 'Custom Server' from
+> the list of servers and enter a custom server ip/description
+> in a textfield below. in this case 0 is saved as serverid of
+> the match and the value of the textfield is saved in field
+> 'customserver'. If a server from list is selected, field
 > 'customserver' is not set.
 > - added support for customserver to teammatch class
-> - changed team_matchdetail.html to reflect 'customserver' and 
+> - changed team_matchdetail.html to reflect 'customserver' and
 > 'review' changes
-> - increased length of input fields for servername and 
+> - increased length of input fields for servername and
 > positionname in admin section
 > - fixed bug in team_matchlist.html (wrong colspan)
-> - changed function winner() of class teammap. A map was 
-> declared as lost or won if difference between own and 
+> - changed function winner() of class teammap. A map was
+> declared as lost or won if difference between own and
 > enemies's score was < or > 5. Changed this to < or > 1.
-> 
+>
 > Changes 17.11.2003 - Jace
 > ===================
-> - Added new admin-menu "Layout Manager" 
+> - Added new admin-menu "Layout Manager"
 > - Added new table "team_layout"
-> - roster.php and matchlist now use the colors from table 
+> - roster.php and matchlist now use the colors from table
 > 'team_layout' (added function getLayout() in functions.php therefore)
 > - added field 'review' to table 'team_matches'
 > - changed sql script to include the database changes

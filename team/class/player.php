@@ -1,7 +1,9 @@
 <?php
 // Class for Player management for Team Module
 // $Id: player.php,v 0.1 Date: 13/10/2003, Author: Mithrandir                                         //
-
+if (!defined("XOOPS_ROOT_PATH")) {
+    die("Xoops root path not defined");
+}
 class Player extends XoopsUser
 {
     var $_teams = array();
@@ -24,7 +26,7 @@ class Player extends XoopsUser
         }
         return $player;
     }
-    
+
     function getAvailabilities($pending) {
         if ($pending==1) {
             $type = "AND m.matchresult='Pending'";

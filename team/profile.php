@@ -2,16 +2,13 @@
 include '../../mainfile.php';
 include XOOPS_ROOT_PATH.'/header.php';
 include "functions.php";
-include_once XOOPS_ROOT_PATH.'/class/module.textsanitizer.php';
 include XOOPS_ROOT_PATH."/language/".$xoopsConfig['language']."/user.php";
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/player.php';
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/teammatch.php';
 
 $xoopsOption['template_main'] = 'team_userprofile.html';
 $uid = intval($_GET['uid']);
 if ($uid <= 0) {
-	redirect_header('index.php', 3, _US_SELECTNG);
+	redirect_header('index.php', 3, _AM_TEAM_SELECTNG);
 	exit();
 }
 if (is_object($xoopsUser)) {
@@ -23,7 +20,7 @@ if (is_object($xoopsUser)) {
 		$member_handler =& xoops_gethandler('member');
 		$thisUser =& $member_handler->getUser($uid);
 		if (!is_object($thisUser) || !$thisUser->isActive() ) {
-			redirect_header("index.php",3,_US_SELECTNG);
+			redirect_header("index.php",3,_AM_TEAM_SELECTNG);
 			exit();
 		}
 		$xoopsTpl->assign('user_ownpage', false);
@@ -32,7 +29,7 @@ if (is_object($xoopsUser)) {
 	$member_handler =& xoops_gethandler('member');
 	$thisUser =& $member_handler->getUser($uid);
 	if (!is_object($thisUser) || !$thisUser->isActive()) {
-		redirect_header("index.php",3,_US_SELECTNG);
+		redirect_header("index.php",3,_AM_TEAM_SELECTNG);
 		exit();
 	}
 	$xoopsTpl->assign('user_ownpage', false);
@@ -41,7 +38,7 @@ $myts =& MyTextSanitizer::getInstance();
 if (is_object($xoopsUser) && $xoopsUser->isAdmin()) {
 	$xoopsTpl->assign('user_uid', $thisUser->getVar('uid'));
 }
-$xoopsTpl->assign('lang_allaboutuser', sprintf(_US_ALLABOUT,$thisUser->getVar('uname')));
+$xoopsTpl->assign('lang_allaboutuser', sprintf(_AM_TEAM_ALLABOUT,$thisUser->getVar('uname')));
 $xoopsTpl->assign('user_avatarurl', XOOPS_URL.'/uploads/'.$thisUser->getVar('user_avatar'));
 $xoopsTpl->assign('user_realname', $thisUser->getVar('name'));
 $xoopsTpl->assign('user_websiteurl', '<a href="'.$thisUser->getVar('url', 'E').'" target="_blank">'.$thisUser->getVar('url').'</a>');
@@ -85,8 +82,9 @@ if (!empty($date)) {
 $thisPlayer = new Player($thisUser->getVar("uid"));
 $playerteams = $thisPlayer->getTeams();
 $skills = array();
+$team_handler =& xoops_getmodulehandler('team');
 foreach ($playerteams as $statusid => $teamid) {
-    $team = new Team($teamid);
+    $team =& $team_handler->get($teamid);
     $sql = "SELECT primarypos, secondarypos, tertiarypos FROM ".$xoopsDB->prefix("team_teamstatus")." WHERE uid=".$thisUser->getVar("uid")." AND teamid=".$teamid;
     $sqlresult = $xoopsDB->query($sql);
     $myteamstatus = $xoopsDB->fetchArray($sqlresult);
@@ -102,7 +100,7 @@ foreach ($playerteams as $statusid => $teamid) {
     }
     $teamrank = $thisPlayer->getRank($teamid);
     $teamrank = $teamrank["rank"];
-    $xoopsTpl->append('thisteam', array('name' => $team->teamname(), 'teamrank' => $teamrank, 'teamstatus' => getPlayerStatus($statusid), 'primary' => $primary, 'secondary' => $secondary, 'tertiary' => $tertiary, 'skills' => $skills));
+    $xoopsTpl->append('thisteam', array('name' => $team->getVar('teamname'), 'teamrank' => $teamrank, 'teamstatus' => getPlayerStatus($statusid), 'primary' => $primary, 'secondary' => $secondary, 'tertiary' => $tertiary, 'skills' => $skills));
 }
 $xoopsTpl->assign('lang_profileforuser', _AM_TEAMPROFILEFOR." ".$thisUser->getVar("uname"));
 
@@ -118,34 +116,41 @@ if ($xoopsUser) {
       if ($teammember==1) {
           $match[0] = $thisPlayer->getAvailabilities(1);
           $match[1] = $thisPlayer->getAvailabilities("");
-          $teams = getTeams();
+          $match_handler =& xoops_getmodulehandler('match');
           foreach ($match as $matches) {
 
-          if (count($matches)>0) {
-              foreach ($matches as $matchid => $availability) {
-                  if ((isset($class))&&($class=="even")) {
-                      $class = "odd";
-                  }
-                  else {
-                      $class = "even";
-                  }
-                  $match = new Match($matchid);
-                  $matchdate = date('j/n-y', $match->matchdate());
-                  $teamname = $teams[$match->teamid()];
-                  if ($match->matchresult() == 'Pending') {
-                      $xoopsTpl->assign('newmatches', true);
-                      $xoopsTpl->append('thismatch', array('matchid' => $matchid, 'date' => $matchdate, 'teamname' => $teamname, 'opponent' => $match->opponent(), 'size' => $match->teamsize(), 'type' => $match->ladder(), 'result' => $match->matchresult(), 'availability' => $availability, 'class' => $class));
-                  }
-                  else {
-                      $xoopsTpl->assign('prevmatches', true);
-                      $xoopsTpl->append('prevmatch', array('matchid' => $matchid, 'date' => $matchdate, 'teamname' => $teamname, 'opponent' => $match->opponent(), 'size' => $match->teamsize(), 'type' => $match->ladder(), 'result' => $match->matchresult(), 'availability' => $availability, 'class' => $class));
+              if (count($matches)>0) {
+                  foreach ($matches as $matchid => $availability) {
+                      if ((isset($class))&&($class=="even")) {
+                          $class = "odd";
+                      }
+                      else {
+                          $class = "even";
+                      }
+                      $match =& $match_handler->get($matchid);
+                      $matchdate = date('j/n-y', $match->getVar('matchdate'));
+                      $teamname = $teams[$match->getVar('teamid')];
+                      $match_array = array('matchid' => $matchid,
+                                            'date' => $matchdate,
+                                            'teamname' => $teamname,
+                                            'opponent' => $match->getVar('opponent'),
+                                            'size' => $match->getVar('teamsize'),
+                                            'type' => $match->getVar('ladder'),
+                                            'result' => $match->getVar('matchresult'),
+                                            'availability' => $availability,
+                                            'class' => $class);
+                      if ($match->getVar('matchresult') == 'Pending') {
+                          $xoopsTpl->assign('newmatches', true);
+                          $xoopsTpl->append('thismatch', $match_array);
+                      }
+                      else {
+                          $xoopsTpl->assign('prevmatches', true);
+                          $xoopsTpl->append('prevmatch', $match_array);
+                      }
                   }
               }
           }
-          
-          }
       }
 }
-
 include_once(XOOPS_ROOT_PATH."/footer.php");
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: admin.php,v 1.4 2004/01/09 20:33:34 mithyt2 Exp $
+// $Id: admin.php,v 1.5 2006/06/09 14:32:47 mithyt2 Exp $
 //%%%%%%        Admin Module Name  Articles         %%%%%
 define("_AM_DBUPDATED","Database Updated Successfully!");
 define("_AM_CONFIG","Match Configuration");
@@ -63,6 +63,7 @@ define("_AM_TEAMNONSELECTED","Non-Selected");
 define("_AM_TEAMMAPSELECTION","Map Selection");
 define("_AM_TEAMTEAMMAPS","Team Maps");
 define("_AM_TEAMPOSITIONSELECTION","Position Selection");
+define("_AM_TEAMPOSITIONSKILLSELECTION","Skill Selection");
 define("_AM_TEAMSERVERSELECTION","Server Selection");
 define("_AM_TEAMPOSITIONSHORT","Position Short");
 define("_AM_TEAMPOSITIONNAME","Position Name");

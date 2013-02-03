@@ -113,6 +113,7 @@ define("_AM_TEAMLATEPOSITIVE","Late Positive");
 define("_AM_TEAMLATENEGATIVE","Late Negative");
 define("_AM_TEAMAVAILHASLOCKADMIN","Availability has been locked by the Administrator");
 define("_AM_TEAMHELLO","Hello");
+define("_AM_TEAMCHANGE","Change");
 define("_AM_TEAMYOUSETAVAIL","you are set as Available");
 define("_AM_TEAMYOUSETNOTAVAIL","you are set as Not Available");
 define("_AM_TEAMYOUSETSUB","you are set as Sub");
@@ -204,4 +205,30 @@ define("_AM_TEAMERRORGDLIB","Error creating/copying thumbnail. GDLib installed? 
 define("_AM_TEAMERRORDELETESCREENSHOT","Error deleting screenshot from database");
 define("_AM_TEAMERRORDELETESCREENSHOTSERVER","ERROR: Could not delete screenshot from server");
 define("_AM_TEAMERRORDELETETHUMBNAIL","ERROR: Could not delete thumbnail from server");
+
+// added 02-12-2005 Mithrandir
+define("_AM_TEAM_SELECTNG", "No valid player selected");
+define("_AM_TEAM_ALLABOUT", "All about %s");
+define("_AM_TEAM_EDITPROFILE", "Edit Profile");
+define("_AM_TEAM_AVATAR", "Avatar");
+define("_AM_TEAM_INBOX", "Inbox");
+define("_AM_TEAM_LOGOUT", "Logout");
+define("_AM_TEAM_REALNAME", "Real Name");
+define("_AM_TEAM_WEBSITE", "Website");
+define("_AM_TEAM_EMAIL", "Email");
+define("_AM_TEAM_PM", "Private Message");
+define("_AM_TEAM_ICQ", "ICQ");
+define("_AM_TEAM_AIM", "AIM Handle");
+define("_AM_TEAM_YIM", "YIM Account");
+define("_AM_TEAM_MSNM", "MSN Messenger");
+define("_AM_TEAM_LOCATION", "From");
+define("_AM_TEAM_OCCUPATION", "Occupation");
+define("_AM_TEAM_INTEREST", "Interests");
+define("_AM_TEAM_EXTRAINFO", "Extra Info");
+define("_AM_TEAM_STATISTICS", "Statistics");
+define("_AM_TEAM_MEMBERSINCE", "Member Since");
+define("_AM_TEAM_RANK", "Rank");
+define("_AM_TEAM_POSTS", "Posts");
+define("_AM_TEAM_LASTLOGIN", "Last Login");
+define("_AM_TEAM_SIGNATURE", "Signature");
 ?>

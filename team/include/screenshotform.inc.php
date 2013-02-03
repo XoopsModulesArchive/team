@@ -1,5 +1,5 @@
 <?php
-// $Id: screenshotform.inc.php,v 1.1 2003/12/04 00:26:46 jace303 Exp $
+// $Id: screenshotform.inc.php,v 1.4 2006/06/09 14:32:47 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -24,11 +24,15 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
-
+if (!defined("XOOPS_ROOT_PATH")) {
+    die("Xoops root path not defined");
+}
 include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 $mform = new XoopsThemeForm(_AM_SCREENSHOTS, "screenshotform", xoops_getenv('PHP_SELF'));
 $uid_hidden = new XoopsFormHidden('uid', $xoopsUser->getVar('uid'));
 $mid_hidden = new XoopsFormHidden('mid', $mid);
+
+$matchmap_handler = xoops_getmodulehandler('matchmap', 'team');
 
 // Output list with maps for selected match
 echo "<table width='100%' border='0' cellspacing='1' class='outer'><tr><th>"._AM_TEAMMAPNAME."</th><th>"._AM_TEAMSIDENAME."</th><th>"._AM_SCREENSHOTNAME."</th><th>"._AM_EDIT."</th></tr>";
@@ -40,15 +44,15 @@ for ($mapno=1; $mapno <= $nummaps; $mapno++) {
         $class = "even";
     }
 	echo "<tr class=\"$class\">";
-	$thismap = new MatchMap($mid, $mapno);
-	echo "<td>".$thismap->mapname."</td>";
-	echo "<td>".getSide($thismap->side)."</td>";
-	if (strlen($thismap->screenshot) > 0) {
-		echo "<td>".$thismap->screenshot."<br /><img src=\"screenshots/thumbs/".$thismap->screenshot."\" alt=\"\" border=\"0\" /></td>";
-		echo "<td><a href=\"index.php?op=deletescreenshot&matchmapid=".$thismap->matchmapid()."\">"._AM_DELETE."</a></td>";
+	$thismap = $matchmap_handler->getByMatchid($mid, $mapno);
+	echo "<td>".(is_object($thismap->map) ? $thismap->map->getVar('mapname') : "??")."</td>";
+	echo "<td>".getSide($thismap->getVar('side'))."</td>";
+	if (strlen($thismap->getVar('screenshot')) > 0) {
+		echo "<td>".$thismap->getVar('screenshot')."<br /><img src=\"screenshots/thumbs/".$thismap->getVar('screenshot')."\" alt=\"\" border=\"0\" /></td>";
+		echo "<td><a href=\"index.php?op=deletescreenshot&matchmapid=".$thismap->getVar('matchmapid')."\">"._AM_DELETE."</a></td>";
 	} else {
 		echo "<td>&nbsp;</td>";
-		echo "<td><a href=\"index.php?op=screenshotform&action=add&mid=$mid&matchmapid=".$thismap->matchmapid()."\">"._AM_ADD."</a></td>";
+		echo "<td><a href=\"index.php?op=screenshotform&action=add&mid=$mid&matchmapid=".$thismap->getVar('matchmapid')."\">"._AM_ADD."</a></td>";
 	}
 }
 echo"</table>";

@@ -1,5 +1,5 @@
 <?php
-// $Id: notification.inc.php,v 1.3 2004/03/16 19:22:02 mithyt2 Exp $
+// $Id: notification.inc.php,v 1.6 2006/06/09 14:32:47 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -27,8 +27,8 @@
 
 function team_notify_iteminfo($category, $item_id)
 {
-	$module_handler =& xoops_gethandler('module');
-	$module =& $module_handler->getByDirname('team');
+    $pathparts = explode("/", dirname(__FILE__));
+	$moduleDirName = $pathparts[array_search('modules', $pathparts)+1];
 	$item_id = intval($item_id);
 
 	if ($category=='global') {
@@ -40,21 +40,23 @@ function team_notify_iteminfo($category, $item_id)
 	global $xoopsDB;
 	if ($category=='team') {
 		// Assume we have a valid team id
-		$sql = 'SELECT teamname FROM ' . $xoopsDB->prefix('team_team') . ' WHERE teamid = '.$item_id;
-		$result = $xoopsDB->query($sql); // TODO: error check
-		$result_array = $xoopsDB->fetchArray($result);
-		$item['name'] = $result_array['teamname'];
-		$item['url'] = XOOPS_URL . '/modules/' . $module->getVar('dirname') . '/index.php?teamid=' . $item_id;
+		$team_handler = xoops_getmodulehandler('team', 'team');
+		$team = $team_handler->get($item_id);
+		if ($team->isNew() ) {
+		    return false;
+		}
+		$item['name'] = $team->getVar('teamname');
+		$item['url'] = XOOPS_URL . '/modules/' . $moduleDirName . '/index.php?teamid=' . $item_id;
 		return $item;
 	}
 
 	if ($category=='match') {
-		// Assume we have a valid topid id
+		// Assume we have a valid team id
 		$sql = 'SELECT t.teamname, m.opponent FROM '.$xoopsDB->prefix('team_matches') . ' m, ' . $xoopsDB->prefix('team_team') . ' t WHERE t.teamid = m.teamid AND m.matchid = '. $item_id . ' limit 1';
 		$result = $xoopsDB->query($sql); // TODO: error check
 		$result_array = $xoopsDB->fetchArray($result);
 		$item['name'] = $result_array['teamname']." vs. ".$result_array["opponent"];
-		$item['url'] = XOOPS_URL . '/modules/' . $module->getVar('dirname') . '/matchdetails.php?mid=' . $item_id;
+		$item['url'] = XOOPS_URL . '/modules/' . $moduleDirName . '/matchdetails.php?mid=' . $item_id;
 		return $item;
 	}
 

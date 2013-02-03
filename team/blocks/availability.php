@@ -1,5 +1,5 @@
 <?php
-// $Id: availability.php,v 1.3 2004/01/09 20:33:34 mithyt2 Exp $
+// $Id: availability.php,v 1.5 2006/06/09 14:32:47 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -26,61 +26,59 @@
 //  ------------------------------------------------------------------------ //
 
 function sh_availability() {
-    global $xoopsDB, $xoopsUser;
-	if (is_object($xoopsUser)) {
-		$userid = $xoopsUser->getVar('uid');
-		$block = array();
-		$block['title'] = "Availability for ".$xoopsUser->getVar("uname");
-		$block['content']  = "<table border='0' cellspacing='1'><div align='left'>";
-        $sql = "SELECT teamid, teamname FROM ".$xoopsDB->prefix("team_team");
-        $teamresult = $xoopsDB->query($sql);
-        while ($myteam = $xoopsDB->fetchArray($teamresult)) {
-            $teamnames[$myteam["teamid"]] = $myteam["teamname"];
-        }
-		$sql = "SELECT * FROM ".$xoopsDB->prefix("team_availability")." a, ".$xoopsDB->prefix("team_matches")." m WHERE a.userid=".$userid." AND a.matchid=m.matchid AND m.matchresult='Pending' ORDER BY m.matchdate DESC";
-		$result= $xoopsDB->query($sql);
-		while ($myrow = $xoopsDB->fetchArray($result)) {
-	        $weekday = date( 'D', $myrow["matchdate"]);
-			$day= date(_MEDIUMDATESTRING, $myrow["matchdate"]);
+    global $xoopsUser;
+    if (is_object($xoopsUser)) {
+        $userid = $xoopsUser->getVar('uid');
+        $block = array();
+        $block['title'] = "Availability for ".$xoopsUser->getVar("uname");
+        $block['content']  = "<table border='0' cellspacing='1'><div align='left'>";
+        $team_handler = xoops_getmodulehandler('team', 'team');
+        $teamnames = $team_handler->getList();
+        $availability_handler = xoops_getmodulehandler('availability', 'team');
+        $availabilities = $availability_handler->getPendingByUser($userid);
+        foreach ($availabilities as $myrow) {
+            $weekday = date( 'D', $myrow["matchdate"]);
+            $day= date(_MEDIUMDATESTRING, $myrow["matchdate"]);
             $teamid = $myrow["teamid"];
             $teamname = $teamnames[$teamid];
-			if ($myrow["availability"]=="Not Set") {
-				$notset=1;
-				$match=1;
-				$fontcl="Orange";
-				$avail="No Reply";
-			}
-			elseif (($myrow["availability"]=="No") OR ($myrow["availability"]=="LateNo")) {
-				$match=1;
-				$fontcl="Red";
-				$avail="No";
-			}
-			elseif (($myrow["availability"]=="Yes") OR ($myrow["availability"]=="LateYes")) {
-				$match=1;
-				$fontcl="green";
-				$avail="Yes";
-			}
-			elseif ($myrow["availability"]=="Sub") {
-				$match=1;
-				$fontcl="blue";
-				$avail="Sub";
-			}
+            if ($myrow["availability"]=="Not Set") {
+                $notset=1;
+                $match=1;
+                $fontcl="Orange";
+                $avail="No Reply";
+            }
+            elseif (($myrow["availability"]=="No") OR ($myrow["availability"]=="LateNo")) {
+                $match=1;
+                $fontcl="Red";
+                $avail="No";
+            }
+            elseif (($myrow["availability"]=="Yes") OR ($myrow["availability"]=="LateYes")) {
+                $match=1;
+                $fontcl="green";
+                $avail="Yes";
+            }
+            elseif ($myrow["availability"]=="Sub") {
+                $match=1;
+                $fontcl="blue";
+                $avail="Sub";
+            }
             if ((isset($class))&&($class=="odd")) {
                 $class = "even";
             }
             else {
                 $class = "odd";
             }
-			$block['content'] .= "<tr class=".$class."><td><font color='".$fontcl."'>".$weekday." ".$day." ".$teamname." vs ". $myrow["opponent"]."</font> - <a href='".XOOPS_URL."/modules/team/availability.php?mid=".$myrow["matchid"]."' target='_self'>".$avail."</a> - <a href='".XOOPS_URL."/modules/team/matchdetails.php?mid=".$myrow["matchid"]."' target='_self'>"._BL_TEAMMATCHDETAILS."</td></tr>";
-		}
-		if (!isset($notset)) {
-			$block['content'] .= "<tr><th><font color='green'>"._BL_TEAMNOUNSETAVAIL."</font></th></tr>";
-		}
-		if (!isset($match)) {
-			$block['content'] .= "<tr><th><font color='green'></br>"._BL_TEAMNOUPCOMEMATCHES."</font></th></tr>";
-		}
-		$block['content'] .= "</div></table>";
-		return $block;
-	}
+            $block['content'] .= "<tr class=".$class."><td><font color='".$fontcl."'>".$weekday." ".$day." ".$teamname." vs ". $myrow["opponent"]."</font> - <a href='".XOOPS_URL."/modules/team/availability.php?mid=".$myrow["matchid"]."' target='_self'>".$avail."</a> - <a href='".XOOPS_URL."/modules/team/matchdetails.php?mid=".$myrow["matchid"]."' target='_self'>"._BL_TEAMMATCHDETAILS."</td></tr>";
+        }
+        if (!isset($notset)) {
+            $block['content'] .= "<tr><th><font color='green'>"._BL_TEAMNOUNSETAVAIL."</font></th></tr>";
+        }
+        if (!isset($match)) {
+            $block['content'] .= "<tr><th><font color='green'></br>"._BL_TEAMNOUPCOMEMATCHES."</font></th></tr>";
+        }
+        $block['content'] .= "</div></table>";
+        return $block;
+    }
+    return false;
 }
 ?>

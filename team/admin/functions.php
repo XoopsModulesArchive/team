@@ -66,32 +66,20 @@ function teamItemManage ($nomembers, $members, $teamid, $op, $select, $lang) {
 }
 
 function getAllMembers() {
-    global $xoopsDB;
-    $sql = "SELECT uid, uname FROM ".$xoopsDB->prefix("users")." ORDER BY uname ASC";
-    $result = $xoopsDB->query($sql);
-    $count = 0;
-    while ($row=$xoopsDB->fetchArray($result)) {
-        $allmembers[$row["uid"]]=$row["uname"];
-        $count++;
-    }
+    $member_handler = xoops_gethandler('member');
+    $allmembers = $member_handler->getUserList();
     return $allmembers;
 }
 function getAllMaps() {
-    global $xoopsDB;
-    $sql = "SELECT mapid, mapname FROM ".$xoopsDB->prefix("team_mappool")." ORDER BY mapname ASC";
-    $result = $xoopsDB->query($sql);
-    $count = 0;
-    while ($row=$xoopsDB->fetchArray($result)) {
-        $allmaps[$row["mapid"]]=$row["mapname"];
-        $count++;
-    }
-    return $allmaps;
+    $map_handler = xoops_getmodulehandler('map');
+    return $map_handler->getList();
 }
 function getAllPositions() {
     global $xoopsDB;
     $sql = "SELECT posid, posname FROM ".$xoopsDB->prefix("team_positions")." WHERE postype='Pos' ORDER BY posorder, posname ASC";
     $result = $xoopsDB->query($sql);
     $count = 0;
+    $allpos = array();
     while ($row=$xoopsDB->fetchArray($result)) {
         $allpos[$row["posid"]]=$row["posname"];
         $count++;
@@ -103,6 +91,7 @@ function getAllSkills() {
     $sql = "SELECT posid, posname FROM ".$xoopsDB->prefix("team_positions")." WHERE postype='Skill' ORDER BY posorder, posname ASC";
     $result = $xoopsDB->query($sql);
     $count = 0;
+    $allskills = array();
     while ($row=$xoopsDB->fetchArray($result)) {
         $allskills[$row["posid"]]=$row["posname"];
         $count++;

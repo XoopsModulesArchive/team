@@ -10,7 +10,7 @@ function resizeToFile ($sourcefile, $dest_x, $dest_y, $targetfile, $jpegqual) {
    $source_id = imageCreateFromJPEG("$sourcefile");
 
 	/* Create a new image object (not neccessarily true colour) */
-       
+
    $target_id=imagecreatetruecolor($dest_x, $dest_y);
 
 	/* Resize the original picture and copy it into the just created image
@@ -21,7 +21,7 @@ function resizeToFile ($sourcefile, $dest_x, $dest_y, $targetfile, $jpegqual) {
 	/* Create a jpeg with the quality of "$jpegqual" out of the
    	image object "$target_pic".
    	This will be saved as $targetfile */
- 
+
    imagejpeg ($target_id,"$targetfile",$jpegqual);
 
    return true;
@@ -43,20 +43,21 @@ function getServer($serverid) {
 function getTeams() {
     global $xoopsDB;
     $team = array();
-    $sql = "SELECT teamid, teamname FROM ".$xoopsDB->prefix("team_team")." ORDER BY defteam DESC, teamname ASC";
-    $teamresult = $xoopsDB->query($sql);
-    while ($myteam = $xoopsDB->fetchArray($teamresult)) {
-        $team[$myteam["teamid"]] = $myteam["teamname"];
-    }
-    return $team;
+    $team_handler = xoops_getmodulehandler('team', 'team');
+    $criteria = new CriteriaCompo();
+    $criteria->setSort("defteam DESC, teamname");
+    return $team_handler->getList($criteria);
 }
 
 function getDefaultTeam() {
     global $xoopsDB;
-    $sql = "SELECT teamid FROM ".$xoopsDB->prefix("team_team")." WHERE defteam='1'";
-    $result = $xoopsDB->query($sql);
-    $defteam = $xoopsDB->fetchArray($result);
-    return $defteam["teamid"];
+    $team_handler = xoops_getmodulehandler('team', 'team');
+    $criteria = new Criteria("defteam", 1);
+    $teams = $team_handler->getObjects($criteria, false);
+    if (isset($teams[0])) {
+        return $teams[0]->getVar('teamid');
+    }
+    return 0;
 }
 
 function getPosName($posid) {
@@ -282,8 +283,8 @@ function getCaption($mapno) {
 }
 
 /****************************
-/* Fetches and returns layout data from database 
- */ 
+/* Fetches and returns layout data from database
+ */
 function getLayout() {
     global $xoopsDB;
     $sql = "SELECT * FROM ".$xoopsDB->prefix("team_layout");

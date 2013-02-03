@@ -32,7 +32,7 @@
                       </a>
                  <{/if}>
                  </td>
-                 <td class='odd'><font color=<{$mapdetails.color}>><{$mapdetails.ourscore}> - <{$mapdetails.theirscore}></td>
+                 <td class='odd'><font color="<{$mapdetails.color}>"><{$mapdetails.ourscore}> - <{$mapdetails.theirscore}></font></td>
              </tr>
              <{/foreach}>
              <tr>
@@ -63,7 +63,7 @@
 	    <td>
 	      <table border='0' cellpadding='0' cellspacing='0'>
 			<tr class='head'>
-			  <td colspan=<{$screenshotnumber}>><b><{$lang_screenshots}></b></td>
+			  <td colspan="<{$screenshotnumber}>"><b><{$lang_screenshots}></b></td>
 			</tr>
 			<tr class="odd">
 			<{foreach item=thismap from=$map}>
@@ -89,7 +89,7 @@
                <{/if}>
                <{if $thismap.edit == "edit"}>
                   <{foreach item=lineup from=$thismap.lineup}>
-                            <tr class=<{$lineup.class}>>
+                            <tr class="<{$lineup.class}>">
                                 <td><b><{$lineup.uname}></b></td>
                                 <td><{$lineup.posname}></td>
                                 <td><{$lineup.posdesc}></td>
@@ -98,7 +98,7 @@
                   <{/if}>
                   <{if $admin == "yes" AND $pending == true}>
                        <tr class='outer'>
-                           <td colspan=3><a href='matchdetails.php?op=lineup&mid=<{$mid}>&mapid=<{$thismap.mapid}>'>*<{$thismap.edit}> <{$lang_lineup}></a></td>
+                           <td colspan=3><a href='matchdetails.php?op=lineup&amp;mid=<{$mid}>&amp;matchmapid=<{$thismap.matchmapid}>'>*<{$thismap.edit}> <{$lang_lineup}></a></td>
                        </tr>
                   <{elseif $thismap.edit=="set"}>
                        <tr class='outer'><td colspan=3><{$lang_nolineupyet}></td></tr>

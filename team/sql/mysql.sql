@@ -38,8 +38,7 @@ CREATE TABLE `team_lineups_positions` (
   `posid` mediumint(8),
   `posdesc` text,
   `uid` int(12),
-  `matchid` int(12),
-  `mapid` int(11),
+  `matchmapid` int(12),
   PRIMARY KEY  (`lineupid`),
   UNIQUE KEY `lineupid` (`lineupid`),
   KEY `lineupid_2` (`lineupid`)
@@ -79,7 +78,7 @@ CREATE TABLE `team_matchmaps` (
   `ourscore` int(11) default '0',
   `theirscore` int(11) default '0',
   `general` text,
-  `screenshot` varchar(64) default NULL,
+  `screenshot` varchar(64) default '',
   PRIMARY KEY (`matchmapid`),
   UNIQUE KEY `matchmapid` (`matchmapid`)
 );
@@ -110,7 +109,7 @@ CREATE TABLE `team_server` (
   `serverport` mediumint(8),
   `is_bookable` tinyint(4),
   `serverzone` tinyint(4),
-  
+
   PRIMARY KEY  (`serverid`),
   UNIQUE KEY `serverid` (`serverid`),
   KEY `serverid_2` (`serverid`)

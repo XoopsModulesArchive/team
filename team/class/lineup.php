@@ -1,149 +1,110 @@
 <?php
 // Class for Lineup management for Team Module
 // $Id: lineup.php,v 0.1 Date: 13/10/2003, Author: Mithrandir                                         //
-
-class Lineup
+if (!defined("XOOPS_ROOT_PATH")) {
+    die("Xoops root path not defined");
+}
+if (!class_exists("XoopsPersistableObjectHandler")) {
+    include_once XOOPS_ROOT_PATH."/modules/team/class/object.php";
+}
+class Lineup extends XoopsObject
 {
-    var $lineuptable;
-    var $positionstable;
-    var $maptable;
-	var $db;
-    var $matchid;
-    var $mapname;
-    var $mapid;
-    var $general;
+	var $map;
 
     //Constructor
-	function Lineup($matchid=0, $mapid=null)
+	function Lineup()
 	{
-		$this->db =& Database::getInstance();
-        $this->positionstable = $this->db->prefix("team_lineups_positions");
-        $this->maptable = $this->db->prefix("team_mappool");
-		if ( is_array($matchid) ) {
-			$this->makeLineup($matchid);
-		} elseif ($matchid!=0) {
-            $this->mapid = $mapid;
-            $this->matchid = $matchid;
-            $this->mapname = $this->getMapname();
-            $this->general = $this->fetchGeneral();
-		}
+        $this->initVar('matchmapid', XOBJ_DTYPE_INT);
+        $this->initVar('matchid', XOBJ_DTYPE_INT);
+        $this->initVar('mapid', XOBJ_DTYPE_INT);
+        $this->initVar('general', XOBJ_DTYPE_TXTAREA);
 	}
+
     function getPositions() {
-        $array = array();
-        $sql = "SELECT lineupid, uid, posid, posdesc FROM ".$this->db->prefix("team_lineups_positions")." WHERE matchid=".$this->matchid." AND mapid=". $this->mapid." ORDER BY lineupid";
-        $result = $this->db->query($sql);
-        while ($row = $this->db->fetchArray($result)) {
-            $array[] = array("lineupid" =>$row["lineupid"], "uid" => $row["uid"], "posid" => $row["posid"], "posdesc" => $row["posdesc"]);
-        }
-        if (count($array)>0) {
-            return $array;
-        }
-        else {
-            return array();
-        }
+        $lineuppos_handler = xoops_getmodulehandler('lineupposition', 'team');
+        $criteria = new CriteriaCompo(new Criteria("matchmapid", $this->getVar('matchmapid')));
+        $criteria->setSort("lineupid");
+        return $lineuppos_handler->getObjects($criteria, false, false);
     }
 
-	function makeLineup($array)
-	{
-		foreach ( $array as $key=>$value ){
-			$this->$key = $value;
-		}
-    }
-    
     function getMapname()
     {
-        $sql = "SELECT mapname FROM ".$this->maptable." WHERE mapid=".$this->mapid;
-        $result = $this->db->query($sql);
-        $row = $this->db->fetchArray($result);
-        return $row["mapname"];
+        $map_handler = xoops_getmodulehandler('map', 'team');
+        $map_list = $map_handler->getList(new Criteria("mapid", $this->getVar('mapid')));
+        return isset($map_list[$this->getVar('mapid')]) ? $map_list[$this->getVar('mapid')] : "";
     }
 
     function fetchGeneral()
     {
-        $sql = "SELECT general FROM ".$this->db->prefix("team_matchmaps")." WHERE mapid=".$this->mapid." AND matchid=".$this->matchid;
-        $result = $this->db->query($sql);
-        $row = $this->db->fetchArray($result);
-        $this->general = $row["general"];
-        return $row["general"];
+        $map_handler = xoops_getmodulehandler('matchmap', 'team');
+        $criteria = new CriteriaCompo("matchmapid", $this->getVar('matchmapid'));
+        $map = $map_handler->getObjects($criteria);
+        if (isset($map[0])) {
+            $this->setVar('general', $map[0]->getVar('general', 'n'));
+            return $map[0]->getVar('general');
+        }
+        return "";
     }
-    
+
     function saveGeneral()
     {
-        if ( !isset($this->matchid) ) {
+        if (!$this->getVar('matchid')) {
             return false;
         }
         else {
-            $sql = "UPDATE ".$this->db->prefix("team_matchmaps")." SET general=".$this->db->quoteString($this->general)."
-                 WHERE matchid=".intval($this->matchid)." AND mapid=".intval($this->mapid);
+            $map_handler = xoops_getmodulehandler('matchmap', 'team');
+            $criteria = new CriteriaCompo("matchmapid", $this->getVar('matchmapid'));
+            $map = $map_handler->getObjects($criteria);
+            if (isset($map[0])) {
+                $map[0]->setVar('general', $this->getVar('general'));
+                return $map_handler->insert($map[0]);
+            }
         }
-        if (!$result = $this->db->query($sql)) {
-			return false;
-		}
-        return true;   
+        return false;
     }
 
-	function setMatchid($value)
-	{
-		$this->matchid = intval($value);
-	}
-
-	function setMapid($value)
-	{
-		$this->mapid = intval($value);
-	}
-
-	function setGeneral($value)
-	{
-		$this->general = $value;
-	}
-
-    function setMapname($value)
-    {
-        $this->mapname = $value;
-    }
-
-	function matchid()
-	{
-		return $this->matchid;
-	}
-
-	function mapid()
-	{
-		return $this->mapid;
-	}
-
-    function mapname()
-    {
-        return $this->mapname;
-    }
-
-    function general()
-    {
-        return $this->general;
-    }
-    
     function show() {
-        $team = new Team($this->teamid);
+        $team_handler =& xoops_getmodulehandler('team');
+        $team =& $team_handler->get($this->getVar('teamid'));
         echo "<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>";
         echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";
         echo "<tr class='head'><td colspan=2><h3>";
-        echo $this->teamsize." "._AM_TEAMVERSUS." ".$this->teamsize." "._AM_TEAMTACTICSFOR." ".$team->teamname." "._AM_TEAMON." ".$this->mapname;
+        echo $this->getVar('teamsize')." "._AM_TEAMVERSUS." ".$this->getVar('teamsize')." "._AM_TEAMTACTICSFOR." ".$team->getVar('teamname')." "._AM_TEAMON." ".$this->getVar('mapname');
         echo "</h3></td></tr>";
         echo "<tr><td colspan=2>";
         include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
         $mform = new XoopsThemeForm(_AM_TEAMTACTICSDISPLAY, "display", xoops_getenv('PHP_SELF'));
-        $general = new XoopsFormLabel(_AM_TEAMGENERALTACS, $this->general);
+        $general = new XoopsFormLabel(_AM_TEAMGENERALTACS, $this->getVar('general'));
         $mform->addElement($general);
         $positions = $this->getPositions();
-        $posshortlist = getShortList($this->teamid);
-        foreach ($positions as $key => $tacposid) {
-            $thispos = new TacticsPosition($tacposid);
-            $posshort = $posshortlist[$thispos->posid()];
-            $position[$key] = new XoopsFormLabel($posshort, $thispos->posdesc());
+        $posshortlist = $team->getShortList();
+        foreach ($positions as $key => $tacpos) {
+            $posshort = $posshortlist[$tacpos['posid']];
+            $position[$key] = new XoopsFormLabel($posshort, $tacpos['posdesc']);
             $mform->addElement($position[$key]);
         }
         $mform->display();
         echo "</table></td></tr></table>";
+    }
+}
+
+class TeamLineupHandler extends XoopsObjectHandler {
+    /**
+     * retrieve a lineup
+     *
+     * @param array $matchmapid ID of matchmap
+     * @return mixed reference to the {@link Lineup} object, FALSE if failed
+     */
+    function &get($matchmapid) {
+        $ret = new Lineup();
+        $matchmap_handler = xoops_getmodulehandler('matchmap', 'team');
+        $matchmap = $matchmap_handler->get($matchmapid);
+        $ret->setVar("matchmapid", $matchmap->getVar('matchmapid'));
+        $ret->setVar("matchid", $matchmap->getVar('matchid'));
+        $ret->setVar("mapid", $matchmap->getVar('mapid'));
+        $ret->setVar('general', $matchmap->getVar('general'));
+        $ret->map = $matchmap->map;
+        return $ret;
     }
 }
 ?>

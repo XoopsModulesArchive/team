@@ -1,5 +1,5 @@
 <?php
-// $Id: matchform.inc.php,v 1.3 2003/12/04 00:35:55 jace303 Exp $
+// $Id: matchform.inc.php,v 1.6 2006/06/09 14:32:47 mithyt2 Exp $
 //  ------------------------------------------------------------------------ //
 //                XOOPS - PHP Content Management System                      //
 //                    Copyright (c) 2000 XOOPS.org                           //
@@ -24,7 +24,9 @@
 //  along with this program; if not, write to the Free Software              //
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 //  ------------------------------------------------------------------------ //
-
+if (!defined("XOOPS_ROOT_PATH")) {
+    die("Xoops root path not defined");
+}
 include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 if (isset($matchdate)) {
     $date = $matchdate;
@@ -39,7 +41,7 @@ else {
     $op = _AM_SUBMITMATCH;
     $op_hidden = new XoopsFormHidden('op', 'savematch');
 }
-$mform = new XoopsThemeForm($op." for ".$team->teamname(), "matchform", xoops_getenv('PHP_SELF'));
+$mform = new XoopsThemeForm($op." for ".$team->getVar('teamname'), "matchform", xoops_getenv('PHP_SELF'));
 $uid_hidden = new XoopsFormHidden('uid', $xoopsUser->getVar('uid'));
 $mid_hidden = new XoopsFormHidden('mid', $mid);
 $team_hidden = new XoopsFormHidden('teamid', $teamid);
@@ -97,24 +99,26 @@ $result_select->addOption("Win");
 $result_select->addOption("Loss");
 $result_select->addOption("Draw");
 
-$nummaps = $team->maps();
+$nummaps = $team->getVar('maps');
+$matchmap_handler = xoops_getmodulehandler('matchmap', 'team');
+$matchmaps = $matchmap_handler->getByMatchid($mid);
+$teamsides = $team->getSides();
 for ($mapno=1; $mapno <= $nummaps; $mapno++) {
     if ($op==_AM_EDITMATCH) {
-        $thismap = new MatchMap($mid, $mapno);
-        $our[$mapno] = new XoopsFormText(_AM_TEAMUS, 'ourscore[]', 10, 10, $thismap->ourscore(), 'E');
-        $their[$mapno] = new XoopsFormText(_AM_TEAMTHEM, 'theirscore[]', 10, 10, $thismap->theirscore(), 'E');
-        $mapid = $thismap->mapid();
-        $thisside = $thismap->side();
+        $thismap = isset($matchmaps[$mapno]) ? $matchmaps[$mapno] : $matchmap_handler->create();
+        $our[$mapno] = new XoopsFormText(_AM_TEAMUS, 'ourscore[]', 10, 10, $thismap->getVar('ourscore', 'E'));
+        $their[$mapno] = new XoopsFormText(_AM_TEAMTHEM, 'theirscore[]', 10, 10, $thismap->getVar('theirscore', 'E'));
+        $mapid = $thismap->getVar('mapid');
+        $thisside = $thismap->getVar('side');
     }
     $map_select[$mapno] = new XoopsFormSelect(getCaption($mapno), 'map[]', $mapid);
     $side[$mapno] = new XoopsFormSelect(_AM_TEAMSIDE, 'side[]', $thisside);
-    $teamsides = $team->getSides();
     foreach ($teamsides as $sideid => $sidename) {
         $side[$mapno]->addOption($sideid, $sidename);
     }
 }
 
-$teammaps = $team->getTeamMapIDs();
+$teammaps = $team->getTeamMaps();
 for ($mapno=1; $mapno <= $nummaps; $mapno++) {
     $map_select[$mapno]->addOption(0, _AM_TEAMUNDECIDED);
     foreach ($teammaps as $mapid => $mapname) {
@@ -159,8 +163,10 @@ $mform->addElement($server_select);
 $mform->addElement($customserver_label);
 $mform->addElement($customserver_text);
 $mform->addElement($review_tarea);
-$screenshots_label = new XoopsFormLabel(_AM_SCREENSHOTS, "<a href=\"index.php?op=screenshotform&mid=$mid\">"._AM_ADDSCREENSHOTS."</a>");
-$mform->addElement($screenshots_label);
+if ($mid > 0) {
+    $screenshots_label = new XoopsFormLabel(_AM_SCREENSHOTS, "<a href=\"index.php?op=screenshotform&mid=$mid\">"._AM_ADDSCREENSHOTS."</a>");
+    $mform->addElement($screenshots_label);
+}
 $mform->addElement($button_tray);
 $mform->display();
 ?>

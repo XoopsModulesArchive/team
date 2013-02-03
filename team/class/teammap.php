@@ -2,7 +2,7 @@
 // Class for Match Map management for Team Module
 // $Id: teammap.php,v 0.1 Date: 13/10/2003, Author: Mithrandir                                         //
 
-class MatchMap
+class XoopsMatchMap extends XoopsObject 
 {
     var $table;
 	var $db;
@@ -18,7 +18,7 @@ class MatchMap
 	var $screenshot;
 
     //Constructor
-	function MatchMap($matchid=null, $mapno=null)
+	function XoopsMatchMap($matchid=null, $mapno=null)
 	{
 		$this->db =& Database::getInstance();
 		$this->table = $this->db->prefix("team_matchmaps");
@@ -193,5 +193,8 @@ class MatchMap
 		$array = $this->db->fetchArray($this->db->query($sql));
 		return $array["tacid"];
     }
+}
+class XoopsMatchMapHandler extends XoopsObjectHandler {
+    
 }
 ?>

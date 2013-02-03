@@ -1,7 +1,6 @@
 <?php
 include("../../mainfile.php");
 include("../../header.php");
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/functions.php';
 
 $teamid = isset($_GET['teamid']) ? intval($_GET['teamid']) : null;
@@ -11,9 +10,10 @@ if (isset($_POST)) {
 		${$k} = $v;
 	}
 }
+$team_handler =& xoops_getmodulehandler('team');
 if ($xoopsUser) {
    if (isset($submit)) {
-       $team = new Team($teamid);
+       $team =& $team_handler->get($teamid);
        if ($team->isTeamMember($xoopsUser->getVar("uid"))) {
            $tertiary = intval($tertiary);
            if ($tertiary > 0) {
@@ -40,7 +40,7 @@ if ($xoopsUser) {
    if (!isset($teamid)) {
        $teamid = getDefaultTeam();
    }
-   $team = new Team($teamid);
+   $team =& $team_handler->get($teamid);
    echo "<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>";
    echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";
    echo "<tr class='head'><td align='right'>";
@@ -60,7 +60,7 @@ if ($xoopsUser) {
    else {
    		$uid = $xoopsUser->getVar("uid");
    }
-   $thisUser=new xoopsUser($uid);
+   $thisUser=new XoopsUser($uid);
    $user = $thisUser->getVar("uname");
    $sql = "SELECT rank, primarypos, secondarypos, tertiarypos FROM ".$xoopsDB->prefix("team_teamstatus")." WHERE uid=".$uid." AND teamid=".$teamid;
    $myteamstatus = $xoopsDB->fetchArray($xoopsDB->query($sql));
@@ -69,7 +69,7 @@ if ($xoopsUser) {
    $secondary = $myteamstatus["secondarypos"];
    $tertiary = $myteamstatus["tertiarypos"];
    $rank = getRank($rankid);
-   echo "<tr class='head'><td><b>".$team->teamname."</b></td><td></td></tr>";
+   echo "<tr class='head'><td><b>".$team->getVar('teamname')."</b></td><td></td></tr>";
    echo "<tr class='even'><td>"._AM_TEAMPLAYERNAME."</td><td><a href='profile.php?uid=".$uid."'>".$user."</a></td>";
    echo "<tr class='odd'><td>"._AM_TEAMPLAYERRANK."</td><td><font color='".$rank["color"]."'>".$rank["rank"]."</font></td>";
    echo "<tr class='head'><td colspan=2><b>"._AM_TEAMPOSITIONS."</b></td>";

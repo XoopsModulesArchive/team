@@ -2,7 +2,6 @@
 include("../../mainfile.php");
 include XOOPS_ROOT_PATH.'/header.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/functions.php';
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
 
 $teamid = isset($_GET['teamid']) ? intval($_GET['teamid']) : null;
 $mid = isset($_GET['mid']) ? intval($_GET['mid']) : null;
@@ -12,24 +11,23 @@ if (isset($_POST)) {
 	}
 }
 if ($xoopsUser) {
+    $team_handler =& xoops_getmodulehandler('team');
    $uid = $xoopsUser->getVar("uid");
    include_once XOOPS_ROOT_PATH.'/class/module.textsanitizer.php';
    $xoopsOption['template_main'] = 'team_positions.html';
    if (isset($mid)) {
-       include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/teammatch.php';
-       include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/teammap.php';
-       $match = new Match($mid);
-       $teamid = $match->teamid();
-       $team = new Team($teamid);
+       $match_handler =& xoops_getmodulehandler('match');
+       $match =& $match_handler->get($mid);
+       $teamid = $match->getVar('teamid');
+       $team =& $team_handler->get($teamid);
        if (!$team->isTeamMember($uid)) {
            redirect_header('index.php', 3, _AM_TEAMACCESSDENY);
            exit();
        }
        $maps = $match->getMatchMaps();
-       foreach ($maps as $mapno => $matchmapid) {
-           $thismap = new MatchMap($mid, $mapno);
+       foreach ($maps as $mapno => $thismap) {
            $map[$mapno]["caption"] = getCaption($mapno);
-           $map[$mapno]["name"] = $thismap->mapname();
+           $map[$mapno]["name"] = is_object($thismap->map) ? $thismap->map->getVar('mapname') : "??";
        }
        $xoopsTpl->assign('maps', $map);
        if ($available = $match->getPositions("Yes")) {
@@ -41,7 +39,7 @@ if ($xoopsUser) {
        if ($subs = $match->getPositions("Sub")) {
            $team->positions(_AM_TEAMSUBSTITUTES, $subs);
        }
-       $xoopsTpl->assign('opponent', $match->opponent());
+       $xoopsTpl->assign('opponent', $match->getVar('opponent'));
        $xoopsTpl->assign('match', 1);
        $xoopsTpl->assign('mid', $mid);
        $xoopsTpl->assign('teamid', $teamid);
@@ -50,14 +48,14 @@ if ($xoopsUser) {
        if (!isset($teamid)) {
            $teamid=getDefaultTeam();
        }
-       $team = new Team($teamid);
+       $team =& $team_handler->get($teamid);
        $team->select();
        if (!$team->isTeamMember($uid)) {
            redirect_header("index.php",3,_AM_TEAMSORRYRESTRICTEDAREA);
        }
        else {
            $players = $team->getPlayerPositions();
-           $team->positions($team->teamname(), $players);
+           $team->positions($team->getVar('teamname'), $players);
            $xoopsTpl->assign('teamid', $teamid);
        }
    }
@@ -65,7 +63,7 @@ if ($xoopsUser) {
        $xoopsTpl->assign('admin', "Yes");
    }
    $xoopsTpl->assign('allranks', getAllRanks());
-   $xoopsTpl->assign('teamname', $team->teamname());
+   $xoopsTpl->assign('teamname', $team->getVar('teamname'));
    $xoopsTpl->assign('lang_teamnickname', _AM_TEAMNICKNAME);
    $xoopsTpl->assign('lang_teamversus', _AM_TEAMVERSUS);
    $xoopsTpl->assign('lang_teammatchlist', _AM_TEAMMATCHLIST);

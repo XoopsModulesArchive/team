@@ -1,11 +1,13 @@
 <?php
 include '../../mainfile.php';
-include XOOPS_ROOT_PATH.'/header.php';
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
+
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/functions.php';
 
 $teamid = isset($_GET['teamid']) ? intval($_GET['teamid']) : getDefaultTeam();
-$team = new Team($teamid);
+$team_handler =& xoops_getmodulehandler('team');
+$team =& $team_handler->get($teamid);
+$xoopsOption['template_main'] = 'team_roster.html';
+include XOOPS_ROOT_PATH.'/header.php';
 if ($xoopsUser) {
     $uid = $xoopsUser->getVar("uid");
     if ($team->isTeamAdmin($uid)) {
@@ -15,8 +17,6 @@ if ($xoopsUser) {
         $xoopsTpl->assign('teammember', 'Yes');
     }
 }
-include_once XOOPS_ROOT_PATH.'/class/module.textsanitizer.php';
-$xoopsOption['template_main'] = 'team_roster.html';
 $players = $team->getAllMembers();
 $count = 0;
 $ranks = getAllRanks();
@@ -71,8 +71,8 @@ $xoopsTpl->assign('players', $teamplayer);
 $xoopsTpl->assign('actives', $count);
 $xoopsTpl->assign('count', count($players));
 $xoopsTpl->assign('teamid', $teamid);
-$xoopsTpl->assign('teamname', $team->teamname());
-$xoopsTpl->assign('teamtype', $team->teamtype());
+$xoopsTpl->assign('teamname', $team->getVar('teamname'));
+$xoopsTpl->assign('teamtype', $team->getVar('teamtype'));
 $xoopsTpl->assign('lang_teamrosterfor', _AM_TEAMROSTERFOR);
 $xoopsTpl->assign('lang_teamplaying', _AM_TEAMPLAYING);
 $xoopsTpl->assign('lang_teamadmin', _AM_TEAMADMIN);

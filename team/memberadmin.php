@@ -1,6 +1,5 @@
 <?php
 include '../../mainfile.php';
-include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/team.php';
 include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/functions.php';
 
 $op = isset($_GET['op']) ? $_GET['op'] : 'default';
@@ -12,12 +11,13 @@ if (isset($_POST)) {
 }
 
 if ($xoopsUser) {
+    $team_handler =& xoops_getmodulehandler('team');
     $uid = $xoopsUser->getVar("uid");
     if (!isset($teamid)) {
         redirect_header("roster.php", 3, _AM_NOTEAMSELECTED);
     }
     else {
-        $team = new Team($teamid);
+        $team =& $team_handler->get($teamid);
     }
     if (($team->isTeamAdmin($uid))||($xoopsUser->isAdmin($xoopsModule->mid()))) {
         switch ($op) {
@@ -108,8 +108,8 @@ if ($xoopsUser) {
             $xoopsTpl->assign('activecount', $count);
             $xoopsTpl->assign('totalcount', count($players));
             $xoopsTpl->assign('teamid', $teamid);
-            $xoopsTpl->assign('teamname', $team->teamname());
-            $xoopsTpl->assign('teamtype', $team->teamtype());
+            $xoopsTpl->assign('teamname', $team->getVar('teamname'));
+            $xoopsTpl->assign('teamtype', $team->getVar('teamtype'));
             $xoopsTpl->assign('allstatus', $statuses);
             $xoopsTpl->assign('allranks', $allranks);
             $xoopsTpl->assign('lang_administrationof', _AM_TEAMADMINISTRATIONOF);

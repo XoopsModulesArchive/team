@@ -1,0 +1,89 @@
+<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>
+  <tr>
+      <td class='bg6'>
+          <table width='100%' border='0' cellpadding='0' cellspacing='0'>
+             <{if $showselect == 1}>
+             <tr>
+                 <td colspan=2>
+                     <{include file='db:team_select.html' title=$lang_selecttitle caption=$lang_selectcaption submit=$lang_submit name=$lang_teamid options=$teams selected=$selected url=$url}>
+                 </td>
+             </tr>
+             <{/if}>
+             <tr class='head'>
+                 <td><{$matchlistfor}><b><{$teamname}></b></td>
+                 <td align='right'>
+                     <{if $admin == "yes"}>
+                          <a href = 'index.php?op=matchform'><{$addmatch}></a>
+                     <{/if}>
+                 </td>
+             </tr>
+          </table>
+      </td>
+  </tr>
+  <tr>
+      <td colspan='2'>
+          <table width='100%' border='0' cellpadding='4' cellspacing='1'>
+             <tr>
+                 <th width='15%'><b><{$teamdate}></b></th>
+                 <th><b><{$teamopponent}></b></th>
+                 <th><b><{$teammatchtype}></b></th>
+                 <th><b><{$teamresult}></b></th>
+                  <{foreach item=thiscap from=$captions}>
+                    <th><b><{$thiscap.caption}></b></th>
+                  <{/foreach}>
+                 <{if $isTeamMember == true}>
+                      <th><b><{$teamy}></b></th>
+                      <th><b><{$teamn}></b></th>
+                      <th><b>?</b></th>
+                      <th width='15'></th>
+                 <{/if}>
+             </tr>
+             <{foreach item=thismatch from=$match}>
+             <tr class='<{$thismatch.class}>'>
+                 <td><{$thismatch.weekday}>-<{$thismatch.mdate}></td>
+                 <td align=center>
+                 <{if $isTeamMember == true}>
+                      <a href='matchdetails.php?mid=<{$thismatch.mid}>'>
+                 <{/if}>
+                 <{$thismatch.opponent}>
+                 <{if $isTeamMember == true}>
+                      </a>
+                 <{/if}>
+                 </td>
+                 <td><font color='<{$thismatch.matchcolor}>'><{$thismatch.type}></font></td>
+                 <td>
+                 <{if $admin == "yes"}>
+                      <a href='index.php?op=matchform&mid=<{$thismatch.mid}>' target='_self'>
+                 <{/if}>
+                 <{$thismatch.matchresult}></td>
+                 <{foreach item=thismap from=$thismatch.map}>
+                   <td align=center><font color='<{$thismap.color}>'><{$thismap.name}></font></td>
+                 <{/foreach}>
+                 <{if $isTeamMember == true}>
+                      <td><b><{$thismatch.yes}></b></td>
+                      <td><b><{$thismatch.no}></b></td>
+                      <td><b><{$thismatch.noreply}></b></td>
+                      <td><a href='availability.php?mid=<{$thismatch.mid}>'>
+                             <img src='images/<{$thismatch.pic}>.gif' width='15' height='20'>
+                      </a></td>
+                 <{/if}>
+             </tr>
+             <{/foreach}>
+             <tr>
+                 <th colspan='14'><b><{$teamwins}><{$wins}></b> - <b><{$teamlosses}><{$losses}></b> - <b><{$teamdraws}><{$draws}></b></th>
+             </tr>
+             <tr class='head'>
+                 <td colspan='4'>
+                 <{if $nextstart > 10}>
+                      <a href='index.php?teamid=<{$teamid}>&start=<{$prevstart}>'><{$lang_prevmatches}></a>
+                 <{/if}>
+                 </td>
+                 <td colspan='8' align='right'>
+                     <a href='index.php?teamid=<{$teamid}>&start=<{$nextstart}>'><{$lang_nextmatches}></a>
+                 </td>
+             </tr>
+          </table>
+      </td>
+  </tr>
+</table>
+<{include file='db:system_notification_select.html'}>

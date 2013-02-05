@@ -13,7 +13,7 @@ class Player extends XoopsUser
     //Constructor
 	function Player($id=-1)
 	{
-          $this->db =& Database::getInstance();
+          $this->db =& XoopsDatabaseFactory::getDatabaseConnection();
           $this->XoopsUser($id);
 	}
 

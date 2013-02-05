@@ -12,7 +12,7 @@ if (isset($_POST)) {
 }
 
 xoops_cp_header();
-$team_handler =& xoops_getmodulehandler('team');
+$team_handler =& xoops_getmodulehandler('team','team');
 $team =& $team_handler->get($teamid);
 switch ($op) {
     case "addmember":
@@ -335,14 +335,14 @@ switch ($op) {
          break;
 
     case "default":
-         $img = XOOPS_URL."/modules/".$xoopsModule->dirname()."/images/manageteam.gif";
-         $url[0]["url"] = "index.php";
-         $url[0]["text"] = _AM_TEAMCONFIG;
-         $url[1]["url"] = "index.php?op=teammanager";
-         $url[1]["text"] = _AM_TEAMMNGR;
-         $url[2]["url"] = "";
-         $url[2]["text"] = _AM_TEAMEDITTEAM;
-         teamTableLink($img, $url);
+//         $img = XOOPS_URL."/modules/".$xoopsModule->dirname()."/images/manageteam.gif";
+//         $url[0]["url"] = "index.php";
+//         $url[0]["text"] = _AM_TEAMCONFIG;
+//         $url[1]["url"] = "index.php?op=teammanager";
+//         $url[1]["text"] = _AM_TEAMMNGR;
+//         $url[2]["url"] = "";
+//         $url[2]["text"] = _AM_TEAMEDITTEAM;
+//         teamTableLink($img, $url);
          teamTableClose();
          teamTableOpen();
          echo "<td colspan=2>";

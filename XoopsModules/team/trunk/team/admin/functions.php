@@ -71,7 +71,7 @@ function getAllMembers() {
     return $allmembers;
 }
 function getAllMaps() {
-    $map_handler = xoops_getmodulehandler('map');
+    $map_handler = xoops_getmodulehandler('map','team');
     return $map_handler->getList();
 }
 function getAllPositions() {

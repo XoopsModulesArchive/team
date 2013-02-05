@@ -30,7 +30,7 @@ if (!defined("XOOPS_ROOT_PATH")) {
 include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
 if (isset($matchdate)) {
     $date = $matchdate;
-    $op = _AM_EDITMATCH;
+    $op = _MD_EDITMATCH;
     $op_hidden = new XoopsFormHidden('op', 'editmatch');
 }
 else {
@@ -38,7 +38,7 @@ else {
     $curmonth = date("m");
     $curyear = date("Y");
     $date = mktime(21,0,0,$curmonth, $curday, $curyear);
-    $op = _AM_SUBMITMATCH;
+    $op = _MD_SUBMITMATCH;
     $op_hidden = new XoopsFormHidden('op', 'savematch');
 }
 $mform = new XoopsThemeForm($op." for ".$team->getVar('teamname'), "matchform", xoops_getenv('PHP_SELF'));
@@ -50,7 +50,7 @@ for ($i = 1; $i <= 31; $i++) {
     $dayarray[$i] = $i;
 }
 $curday = date('d',$date);
-$day_select = new XoopsFormSelect(_AM_DAYC, 'day', $curday);
+$day_select = new XoopsFormSelect(_MD_DAYC, 'day', $curday);
 $day_select->addOptionArray($dayarray);
 
 for ($xmonth=1; $xmonth<13; $xmonth++) {
@@ -59,7 +59,7 @@ for ($xmonth=1; $xmonth<13; $xmonth++) {
     $mvalue[$monthno]=$month;
 }
 $curmonth = date('n',$date);
-$monthselect = new XoopsFormSelect(_AM_MONTHC,'month',$curmonth);
+$monthselect = new XoopsFormSelect(_MD_MONTHC,'month',$curmonth);
 $monthselect->addOptionArray($mvalue);
 
 $curyear = date('Y',$date);
@@ -68,32 +68,36 @@ for ($i=1; $i<6; $i++) {
     $yvalue[$xyear]=$xyear;
     $xyear++;
 }
-$yearselect = new XoopsFormSelect(_AM_YEARC,'year',$curyear);
+$yearselect = new XoopsFormSelect(_MD_YEARC,'year',$curyear);
 $yearselect->addOptionArray($yvalue);
 
 $clock = date('H:i',$date);
-$clock = new XoopsFormText(_AM_TIMEC, 'time', 10, 10, $clock, 'E');
+$clock = new XoopsFormText(_MD_TIMEC, 'time', 10, 10, $clock, 'E');
 $button_tray = new XoopsFormElementTray('' ,'');
-$button_tray->addElement(new XoopsFormButton('', 'save', _NW_POST, 'submit'));
+$button_tray->addElement(new XoopsFormButton('', 'save', _MD_NW_POST, 'submit'));
 
-$teamsize_select = new XoopsFormSelect(_AM_TEAMSIZE, 'teamsize', $teamsize);
+$teamsize = isset($teamsize)?$teamsize:"";
+$teamsize_select = new XoopsFormSelect(_MD_TEAMSIZE, 'teamsize', $teamsize);
 foreach ($teamsizes as $size_id => $ts) {
     $teamsize_select->addOption($ts);
 }
-$opponent = new XoopsFormText(_AM_TEAMOPPONENT, 'opponent', 25, 25, $opponent, 'E');
+$opponent = isset($opponent)?$opponent:"";
+$opponent = new XoopsFormText(_MD_TEAMOPPONENT, 'opponent', 25, 25, $opponent, 'E');
 
-$ladder_select = new XoopsFormSelect(_AM_TEAMMATCHTYPE, 'ladder', $ladder);
+$ladder = isset($ladder)?$ladder:"";
+$ladder_select = new XoopsFormSelect(_MD_TEAMMATCHTYPE, 'ladder', $ladder);
 foreach ($teamladders as $ladder_id => $tl) {
     $ladder_select->addOption($tl);
 }
 
 /*
-$ladder_select = new XoopsFormSelect(_AM_TEAMMATCHTYPE, 'ladder', $ladder);
+$ladder_select = new XoopsFormSelect(_MD_TEAMMATCHTYPE, 'ladder', $ladder);
 $ladder_select->addOption("Ladder");
 $ladder_select->addOption("Scrim");
 $ladder_select->addOption("Practice");
 */
-$result_select = new XoopsFormSelect(_AM_TEAMMATCHRESULT, 'matchresult', $matchresult);
+$matchresult = isset($matchresult)?$matchresult:"";
+$result_select = new XoopsFormSelect(_MD_TEAMMATCHRESULT, 'matchresult', $matchresult);
 $result_select->addOption("Pending");
 $result_select->addOption("Win");
 $result_select->addOption("Loss");
@@ -104,15 +108,17 @@ $matchmap_handler = xoops_getmodulehandler('matchmap', 'team');
 $matchmaps = $matchmap_handler->getByMatchid($mid);
 $teamsides = $team->getSides();
 for ($mapno=1; $mapno <= $nummaps; $mapno++) {
-    if ($op==_AM_EDITMATCH) {
+    if ($op==_MD_EDITMATCH) {
         $thismap = isset($matchmaps[$mapno]) ? $matchmaps[$mapno] : $matchmap_handler->create();
-        $our[$mapno] = new XoopsFormText(_AM_TEAMUS, 'ourscore[]', 10, 10, $thismap->getVar('ourscore', 'E'));
-        $their[$mapno] = new XoopsFormText(_AM_TEAMTHEM, 'theirscore[]', 10, 10, $thismap->getVar('theirscore', 'E'));
+        $our[$mapno] = new XoopsFormText(_MD_TEAMUS, 'ourscore[]', 10, 10, $thismap->getVar('ourscore', 'E'));
+        $their[$mapno] = new XoopsFormText(_MD_TEAMTHEM, 'theirscore[]', 10, 10, $thismap->getVar('theirscore', 'E'));
         $mapid = $thismap->getVar('mapid');
         $thisside = $thismap->getVar('side');
     }
+    $mapid = isset($mapid)?$mapid:"";
     $map_select[$mapno] = new XoopsFormSelect(getCaption($mapno), 'map[]', $mapid);
-    $side[$mapno] = new XoopsFormSelect(_AM_TEAMSIDE, 'side[]', $thisside);
+    $thisside = isset($thisside)?$thisside:"";
+    $side[$mapno] = new XoopsFormSelect(_MD_TEAMSIDE, 'side[]', $thisside);
     foreach ($teamsides as $sideid => $sidename) {
         $side[$mapno]->addOption($sideid, $sidename);
     }
@@ -120,22 +126,24 @@ for ($mapno=1; $mapno <= $nummaps; $mapno++) {
 
 $teammaps = $team->getTeamMaps();
 for ($mapno=1; $mapno <= $nummaps; $mapno++) {
-    $map_select[$mapno]->addOption(0, _AM_TEAMUNDECIDED);
+    $map_select[$mapno]->addOption(0, _MD_TEAMUNDECIDED);
     foreach ($teammaps as $mapid => $mapname) {
         $map_select[$mapno]->addOption($mapid, $mapname);
     }
 }
-$server_select = new XoopsFormSelect(_AM_TEAMSERVER, 'server', $server);
+$server = isset($server)?$server:"";
+$server_select = new XoopsFormSelect(_MD_TEAMSERVER, 'server', $server);
 $myserver = $team->getServers();
-$server_select->addOption(0, _AM_CUSTOMSERVER);
+$server_select->addOption(0, _MD_CUSTOMSERVER);
 foreach ($myserver as $serverid=>$servername) {
     $server_select->addOption($serverid, $servername);
 }
 
-$customserver_label = new XoopsFormLabel('', _AM_MAYCHOOSECUSTOMSERVER);
+$customserver_label = new XoopsFormLabel('', _MD_MAYCHOOSECUSTOMSERVER);
+$customserver = isset($customserver)?$customserver:"";
 $customserver_text = new XoopsFormText('', 'customserver', 40, 40, $customserver);
-
-$review_tarea = new XoopsFormTextArea(_AM_MATCHREVIEW, 'review', $review);
+$review = isset($review)?$review:"";
+$review_tarea = new XoopsFormTextArea(_MD_MATCHREVIEW, 'review', $review);
 
 $mform->addElement($uid_hidden);
 $mform->addElement($mid_hidden);
@@ -148,13 +156,13 @@ $mform->addElement($clock);
 $mform->addElement($opponent);
 $mform->addElement($teamsize_select);
 $mform->addElement($ladder_select);
-if ($op == _AM_EDITMATCH) {
+if ($op == _MD_EDITMATCH) {
     $mform->addElement($result_select);
 }
 for ($mapno = 1; $mapno <= $nummaps; $mapno++) {
     $mform->addElement($map_select[$mapno]);
     $mform->addElement($side[$mapno]);
-    if ($op==_AM_EDITMATCH) {
+    if ($op==_MD_EDITMATCH) {
         $mform->addElement($our[$mapno]);
         $mform->addElement($their[$mapno]);
     }
@@ -164,7 +172,7 @@ $mform->addElement($customserver_label);
 $mform->addElement($customserver_text);
 $mform->addElement($review_tarea);
 if ($mid > 0) {
-    $screenshots_label = new XoopsFormLabel(_AM_SCREENSHOTS, "<a href=\"index.php?op=screenshotform&mid=$mid\">"._AM_ADDSCREENSHOTS."</a>");
+    $screenshots_label = new XoopsFormLabel(_MD_SCREENSHOTS, "<a href=\"index.php?op=screenshotform&mid=$mid\">"._MD_ADDSCREENSHOTS."</a>");
     $mform->addElement($screenshots_label);
 }
 $mform->addElement($button_tray);

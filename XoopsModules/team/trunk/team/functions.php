@@ -260,25 +260,25 @@ function getMap($mapid) {
         return $result["mapname"];
     }
     else {
-        return _AM_TEAMUNDECIDED;
+        return _MD_TEAMUNDECIDED;
     }
 }
 
 function getCaption($mapno) {
     if ($mapno == 1) {
-        return _AM_TEAMFIRSTMAP;
+        return _MD_TEAMFIRSTMAP;
     }
     elseif ($mapno == 2) {
-        return _AM_TEAMSECONDMAP;
+        return _MD_TEAMSECONDMAP;
     }
     elseif ($mapno == 3) {
-        return _AM_TEAMTHIRDMAP;
+        return _MD_TEAMTHIRDMAP;
     }
     elseif ($mapno == 4) {
-        return _AM_TEAMFOURTHMAP;
+        return _MD_TEAMFOURTHMAP;
     }
     elseif ($mapno == 5) {
-        return _AM_TEAMFIFTHMAP;
+        return _MD_TEAMFIFTHMAP;
     }
 }
 

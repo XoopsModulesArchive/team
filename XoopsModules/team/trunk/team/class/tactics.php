@@ -24,7 +24,7 @@ class TeamTactics extends XoopsObject
 		$this->initVar('general', XOBJ_DTYPE_TXTAREA);
 		$this->initVar('mapid', XOBJ_DTYPE_INT);
 
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
 		$this->tacticstable = $this->db->prefix("team_tactics");
         $this->positionstable = $this->db->prefix("team_tactics_positions");
         $this->maptable = $this->db->prefix("team_mappool");
@@ -32,7 +32,7 @@ class TeamTactics extends XoopsObject
 			$this->assignVars($tacid);
 		} elseif (($tacid!=0)&&($teamsize!=null)) {
 		    //$tacid is actually a teamid
-		    $tactics_handler = xoops_getmodulehandler('tactics');
+		    $tactics_handler = xoops_getmodulehandler('tactics','team');
             $tactics =& $tactics_handler->getByParams($tacid, $mapid, $teamsize);
             foreach ($tactics->vars as $k => $v) {
                 $this->assignVar($k, $v['value']);
@@ -40,7 +40,7 @@ class TeamTactics extends XoopsObject
             unset($tactics);
 		}
         elseif ($tacid!=0) {
-            $tactics_handler = xoops_getmodulehandler('tactics');
+            $tactics_handler = xoops_getmodulehandler('tactics','team');
             $tactics =& $tactics_handler->get($tacid);
             foreach ($tactics->vars as $k => $v) {
                 $this->assignVar($k, $v['value']);
@@ -63,8 +63,8 @@ class TeamTactics extends XoopsObject
     }
 
     function show() {
-        $position_handler =& xoops_getmodulehandler('tacticsposition');
-        $team_handler =& xoops_getmodulehandler('team');
+        $position_handler =& xoops_getmodulehandler('tacticsposition','team');
+        $team_handler =& xoops_getmodulehandler('team','team');
         $team =& $team_handler->get($this->getVar('teamid'));
         echo "<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>";
         echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";

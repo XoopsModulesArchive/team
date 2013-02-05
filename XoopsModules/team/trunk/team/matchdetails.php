@@ -11,24 +11,24 @@ if (isset($_POST)) {
         ${$k} = $v;
     }
 }
-$match_handler =& xoops_getmodulehandler('match');
+$match_handler =& xoops_getmodulehandler('match','team');
 $mymatch =& $match_handler->get($mid);
 $teamid = $mymatch->getVar('teamid');
-$team_handler =& xoops_getmodulehandler('team');
+$team_handler =& xoops_getmodulehandler('team','team');
 $team =& $team_handler->get($teamid);
 switch($op) {
     case "savelineup":
-    $lineuppos_handler =& xoops_getmodulehandler('lineupposition');
-    $lineup_handler =& xoops_getmodulehandler('lineup');
+    $lineuppos_handler =& xoops_getmodulehandler('lineupposition','team');
+    $lineup_handler =& xoops_getmodulehandler('lineup','team');
     if ($action=='Edit') {
         $lineups=explode(":",$lineupid);
         $count = count($lineups);
-        $message = _AM_TEAMLINEEDITED;
+        $message = _MD_TEAMLINEEDITED;
         $edit = true;
     }
     elseif ($action=='Add') {
         $count = $teamsize;
-        $message = _AM_TEAMLINEUPADDED;
+        $message = _MD_TEAMLINEUPADDED;
         $edit = false;
     }
     $thislineup = $lineup_handler->get($matchmapid);
@@ -68,8 +68,8 @@ switch($op) {
     break;
 
     case "lineup":
-    $lineuppos_handler =& xoops_getmodulehandler('lineupposition');
-    $lineup_handler =& xoops_getmodulehandler('lineup');
+    $lineuppos_handler =& xoops_getmodulehandler('lineupposition','team');
+    $lineup_handler =& xoops_getmodulehandler('lineup','team');
     if ($xoopsUser && $team->isTacticsAdmin($xoopsUser->getVar("uid"))) {
         $playerid = array();
         $pos = array();
@@ -96,8 +96,8 @@ switch($op) {
                 $action = "Edit";
             }
             else {
-                $tactics_handler =& xoops_getmodulehandler('tactics');
-                $position_handler =& xoops_getmodulehandler('tacticsposition');
+                $tactics_handler =& xoops_getmodulehandler('tactics','team');
+                $position_handler =& xoops_getmodulehandler('tacticsposition','team');
                 $tactics =& $tactics_handler->getByParams($teamid, $mapid, $teamsize);
                 $tacid = $tactics->getVar('tacid');
                 $general = $tactics->getVar('general');
@@ -115,20 +115,20 @@ switch($op) {
             }
         }
         else {
-            redirect_header("index.php",2,_AM_TEAMNOLINEUPSELECTED);
+            redirect_header("index.php",2,_MD_TEAMNOLINEUPSELECTED);
             break;
         }
         echo "<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>";
         echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";
         echo "<tr class='head'><td colspan=2><h3>";
-        echo ""._AM_TEAMLINEUPFOR."".$team->getVar('teamname')." "._AM_TEAMVERSUS." ".$mymatch->getVar('opponent')." "._AM_TEAMON." ".$map;
+        echo ""._MD_TEAMLINEUPFOR."".$team->getVar('teamname')." "._MD_TEAMVERSUS." ".$mymatch->getVar('opponent')." "._MD_TEAMON." ".$map;
         echo "</h3></td></tr>";
         echo "<tr><td colspan=2>";
         include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
-        $mform = new XoopsThemeForm(_AM_TEAMLINEUPADDITION, "savelineup", xoops_getenv('PHP_SELF'));
+        $mform = new XoopsThemeForm(_MD_TEAMLINEUPADDITION, "savelineup", xoops_getenv('PHP_SELF'));
         $players = $mymatch->getMatchPlayers();
         $subs = $mymatch->getMatchSubs();
-        $generaltacs = new XoopsFormTextArea(_AM_TEAMGENERALTACS, "general", $general);
+        $generaltacs = new XoopsFormTextArea(_MD_TEAMGENERALTACS, "general", $general);
         $mform->addElement($generaltacs);
         $teampositions = $team->getPositions();
         for ($i=0;$i<$teamsize;$i++) {
@@ -144,12 +144,12 @@ switch($op) {
             if (isset($desc[$i])) {
                 $thisdesc = $desc[$i];
             }
-            $position_select[$i] = new XoopsFormSelect(_AM_TEAMPOSITION." ".($i+1), "posid[".$i."]", $thispos);
+            $position_select[$i] = new XoopsFormSelect(_MD_TEAMPOSITION." ".($i+1), "posid[".$i."]", $thispos);
             foreach ($teampositions as $positionid => $positionname) {
                 $position_select[$i]->addOption($positionid, $positionname);
             }
-            $player_select[$i] = new XoopsFormSelect(_AM_TEAMPLAYER, "playerid[".$i."]", $player);
-            $player_select[$i]->addOption(0, _AM_TEAMUNDECIDED);
+            $player_select[$i] = new XoopsFormSelect(_MD_TEAMPLAYER, "playerid[".$i."]", $player);
+            $player_select[$i]->addOption(0, _MD_TEAMUNDECIDED);
             foreach ($players as $pid => $pname) {
                 $player_select[$i]->addOption($pid, $pname);
             }
@@ -157,7 +157,7 @@ switch($op) {
             foreach ($subs as $pid => $pname) {
                 $player_select[$i]->addOption($pid, "(Sub)".$pname);
             }
-            $description[$i] = new XoopsFormTextArea(_AM_TEAMDESCRIPTION, "posdesc[".$i."]", $thisdesc);
+            $description[$i] = new XoopsFormTextArea(_MD_TEAMDESCRIPTION, "posdesc[".$i."]", $thisdesc);
             $mform->addElement($position_select[$i]);
             $mform->addElement($player_select[$i]);
             $mform->addElement($description[$i]);
@@ -184,7 +184,7 @@ switch($op) {
         echo "</table></td></tr></table>";
     }
     else {
-        redirect_header("index.php",3,_AM_TEAMACCESSDENIED);
+        redirect_header("index.php",3,_MD_TEAMACCESSDENIED);
         break;
     }
     break;
@@ -204,14 +204,17 @@ switch($op) {
     }
     $time = date("H:i", $mdate);
     $maps = $team->getVar('maps');
+    $side = '';
     $sides = getAllSides();
     $screenshotnumber = 0;
     $ourscoresum = 0; $theirscoresum = 0;
-    $matchmap_handler = xoops_getmodulehandler('matchmap');
+    $matchmap_handler = xoops_getmodulehandler('matchmap','team');
     $matchmaps = $matchmap_handler->getByMatchid($mid);
     for ($i = 1; $i <= $maps; $i++) {
         $thismap = isset($matchmaps[$i]) && is_object($matchmaps[$i]) ? $matchmaps[$i] : $matchmap_handler->create();
-        $side = $sides[$thismap->getVar('side')];
+        $sideindex = $thismap->getVar('side');
+        if (isset($sideindex)){
+        $side = $sides[$sideindex];}
         $map[$i]["matchmapid"] = $thismap->getVar('matchmapid');
         $map[$i]["name"] = is_object($thismap->map) ? $thismap->map->getVar('mapname')." (".$side.")" : "?? (".$side.")";
         $map[$i]["mapid"] = $thismap->getVar('mapid');
@@ -241,25 +244,25 @@ switch($op) {
     }
     $firstday = date( 'w', $mdate);
     if ($firstday==1) {
-        $weekday=_AM_TEAMMONDAY;
+        $weekday=_MD_TEAMMONDAY;
     }
     elseif ($firstday==2) {
-        $weekday=_AM_TEAMTUESDAY;
+        $weekday=_MD_TEAMTUESDAY;
     }
     elseif ($firstday==3) {
-        $weekday=_AM_TEAMWEDNESDAY;
+        $weekday=_MD_TEAMWEDNESDAY;
     }
     elseif ($firstday==4) {
-        $weekday=_AM_TEAMTHURSDAY;
+        $weekday=_MD_TEAMTHURSDAY;
     }
     elseif ($firstday==5) {
-        $weekday=_AM_TEAMFRIDAY;
+        $weekday=_MD_TEAMFRIDAY;
     }
     elseif ($firstday==6) {
-        $weekday=_AM_TEAMSATURDAY;
+        $weekday=_MD_TEAMSATURDAY;
     }
     else {
-        $weekday=_AM_TEAMSUNDAY;
+        $weekday=_MD_TEAMSUNDAY;
     }
     $xoopsTpl->assign('ourscoresum', $ourscoresum);
     $xoopsTpl->assign('theirscoresum', $theirscoresum);
@@ -287,19 +290,19 @@ switch($op) {
     $xoopsTpl->assign('mid', $mid);
     $xoopsTpl->assign('teamsize', $mymatch->getVar('teamsize'));
     $xoopsTpl->assign('ladder', $mymatch->getVar('ladder'));
-    $xoopsTpl->assign('lang_opponent', _AM_TEAMAGAINST);
-    $xoopsTpl->assign('lang_availability', _AM_TEAMMATCHAVAILABILITY);
-    $xoopsTpl->assign('lang_teammatchlist', _AM_TEAMMATCHLIST);
-    $xoopsTpl->assign('lang_matchpositions', _AM_TEAMMATCHPOSITIONS);
-    $xoopsTpl->assign('lang_at', _AM_TEAMAT);
-    $xoopsTpl->assign('lang_matchtype', _AM_TEAMMATCHTYPE);
-    $xoopsTpl->assign('lang_versus', _AM_TEAMVERSUS);
-    $xoopsTpl->assign('lang_server', _AM_TEAMSERVER);
-    $xoopsTpl->assign('lang_review', _AM_MATCHREVIEW);
-    $xoopsTpl->assign('lang_lineupfor', _AM_TEAMLINEUPFOR);
-    $xoopsTpl->assign('lang_lineup', _AM_TEAMLINEUP);
-    $xoopsTpl->assign('lang_nolineupyet', _AM_TEAMNOLINEUPYET);
-    $xoopsTpl->assign('lang_screenshots', _AM_SCREENSHOTS);
+    $xoopsTpl->assign('lang_opponent', _MD_TEAMAGAINST);
+    $xoopsTpl->assign('lang_availability', _MD_TEAMMATCHAVAILABILITY);
+    $xoopsTpl->assign('lang_teammatchlist', _MD_TEAMMATCHLIST);
+    $xoopsTpl->assign('lang_matchpositions', _MD_TEAMMATCHPOSITIONS);
+    $xoopsTpl->assign('lang_at', _MD_TEAMAT);
+    $xoopsTpl->assign('lang_matchtype', _MD_TEAMMATCHTYPE);
+    $xoopsTpl->assign('lang_versus', _MD_TEAMVERSUS);
+    $xoopsTpl->assign('lang_server', _MD_TEAMSERVER);
+    $xoopsTpl->assign('lang_review', _MD_MATCHREVIEW);
+    $xoopsTpl->assign('lang_lineupfor', _MD_TEAMLINEUPFOR);
+    $xoopsTpl->assign('lang_lineup', _MD_TEAMLINEUP);
+    $xoopsTpl->assign('lang_nolineupyet', _MD_TEAMNOLINEUPYET);
+    $xoopsTpl->assign('lang_screenshots', _MD_SCREENSHOTS);
     $xoopsTpl->assign('lock', $mymatch->getVar('alock'));
     if ($mymatch->getVar('matchresult')=='Pending') {
         $xoopsTpl->assign('pending', 1);
@@ -308,7 +311,7 @@ switch($op) {
         $xoopsTpl->assign('pending', 0);
     }
     $allpos = getAllPos();
-    $lineup_handler = xoops_getmodulehandler('lineup');
+    $lineup_handler = xoops_getmodulehandler('lineup','team');
     foreach ($map as $thismap) {
         $thislineup = $lineup_handler->get($thismap["matchmapid"]);
         $general = $thislineup->getVar('general');
@@ -316,7 +319,7 @@ switch($op) {
         $lineup = array();
         if (isset($general)) {
             $lineup[] = array("uname" => "",
-            "posname" => _AM_TEAMGENERALTACS,
+            "posname" => _MD_TEAMGENERALTACS,
             "posdesc" => $general,
             "class" => "even");
         }

@@ -11,17 +11,17 @@ if (isset($_POST)) {
 	}
 }
 if ($xoopsUser) {
-    $team_handler =& xoops_getmodulehandler('team');
+    $team_handler =& xoops_getmodulehandler('team','team');
    $uid = $xoopsUser->getVar("uid");
    include_once XOOPS_ROOT_PATH.'/class/module.textsanitizer.php';
    $xoopsOption['template_main'] = 'team_positions.html';
    if (isset($mid)) {
-       $match_handler =& xoops_getmodulehandler('match');
+       $match_handler =& xoops_getmodulehandler('match','team');
        $match =& $match_handler->get($mid);
        $teamid = $match->getVar('teamid');
        $team =& $team_handler->get($teamid);
        if (!$team->isTeamMember($uid)) {
-           redirect_header('index.php', 3, _AM_TEAMACCESSDENY);
+           redirect_header('index.php', 3, _MD_TEAMACCESSDENY);
            exit();
        }
        $maps = $match->getMatchMaps();
@@ -31,13 +31,13 @@ if ($xoopsUser) {
        }
        $xoopsTpl->assign('maps', $map);
        if ($available = $match->getPositions("Yes")) {
-           $team->positions(_AM_TEAMAVAILABLE, $available);
+           $team->positions(_MD_TEAMAVAILABLE, $available);
        }
        if ($latepos = $match->getPositions("LateYes")) {
-           $team->positions(_AM_TEAMLATEPOSITIVE, $latepos);
+           $team->positions(_MD_TEAMLATEPOSITIVE, $latepos);
        }
        if ($subs = $match->getPositions("Sub")) {
-           $team->positions(_AM_TEAMSUBSTITUTES, $subs);
+           $team->positions(_MD_TEAMSUBSTITUTES, $subs);
        }
        $xoopsTpl->assign('opponent', $match->getVar('opponent'));
        $xoopsTpl->assign('match', 1);
@@ -51,7 +51,7 @@ if ($xoopsUser) {
        $team =& $team_handler->get($teamid);
        $team->select();
        if (!$team->isTeamMember($uid)) {
-           redirect_header("index.php",3,_AM_TEAMSORRYRESTRICTEDAREA);
+           redirect_header("index.php",3,_MD_TEAMSORRYRESTRICTEDAREA);
        }
        else {
            $players = $team->getPlayerPositions();
@@ -64,25 +64,25 @@ if ($xoopsUser) {
    }
    $xoopsTpl->assign('allranks', getAllRanks());
    $xoopsTpl->assign('teamname', $team->getVar('teamname'));
-   $xoopsTpl->assign('lang_teamnickname', _AM_TEAMNICKNAME);
-   $xoopsTpl->assign('lang_teamversus', _AM_TEAMVERSUS);
-   $xoopsTpl->assign('lang_teammatchlist', _AM_TEAMMATCHLIST);
-   $xoopsTpl->assign('lang_teammatchdetails', _AM_TEAMMATCHDETAILS);
-   $xoopsTpl->assign('lang_teammatchavailability', _AM_TEAMMATCHAVAILABILITY);
-   $xoopsTpl->assign('lang_teamadmin', _AM_TEAMADMIN);
-   $xoopsTpl->assign('lang_teammatchlist', _AM_TEAMMATCHLIST);
-   $xoopsTpl->assign('lang_teamroster', _AM_TEAMROSTER);
-   $xoopsTpl->assign('lang_teammypos', _AM_TEAMMYPOS);
-   $xoopsTpl->assign('lang_teamavailstats2', _AM_TEAMAVAILSTATS2);
-   $xoopsTpl->assign('lang_teamprimaryposition', _AM_TEAMPRIMARYPOSITION);
-   $xoopsTpl->assign('lang_teamsecondary', _AM_TEAMSECONDARY);
-   $xoopsTpl->assign('lang_teamtertiary', _AM_TEAMTERTIARY);
-   $xoopsTpl->assign('lang_teamfirstpos', _AM_TEAMFIRSTPOS);
-   $xoopsTpl->assign('lang_teamsecondpos', _AM_TEAMSECONDPOS);
-   $xoopsTpl->assign('lang_teamthirdpos', _AM_TEAMTHIRDPOS);
+   $xoopsTpl->assign('lang_teamnickname', _MD_TEAMNICKNAME);
+   $xoopsTpl->assign('lang_teamversus', _MD_TEAMVERSUS);
+   $xoopsTpl->assign('lang_teammatchlist', _MD_TEAMMATCHLIST);
+   $xoopsTpl->assign('lang_teammatchdetails', _MD_TEAMMATCHDETAILS);
+   $xoopsTpl->assign('lang_teammatchavailability', _MD_TEAMMATCHAVAILABILITY);
+   $xoopsTpl->assign('lang_teamadmin', _MD_TEAMADMIN);
+   $xoopsTpl->assign('lang_teammatchlist', _MD_TEAMMATCHLIST);
+   $xoopsTpl->assign('lang_teamroster', _MD_TEAMROSTER);
+   $xoopsTpl->assign('lang_teammypos', _MD_TEAMMYPOS);
+   $xoopsTpl->assign('lang_teamavailstats2', _MD_TEAMAVAILSTATS2);
+   $xoopsTpl->assign('lang_teamprimaryposition', _MD_TEAMPRIMARYPOSITION);
+   $xoopsTpl->assign('lang_teamsecondary', _MD_TEAMSECONDARY);
+   $xoopsTpl->assign('lang_teamtertiary', _MD_TEAMTERTIARY);
+   $xoopsTpl->assign('lang_teamfirstpos', _MD_TEAMFIRSTPOS);
+   $xoopsTpl->assign('lang_teamsecondpos', _MD_TEAMSECONDPOS);
+   $xoopsTpl->assign('lang_teamthirdpos', _MD_TEAMTHIRDPOS);
 }
 else {
-	redirect_header("index.php",3,_AM_TEAMSORRYRESTRICTEDAREA);
+	redirect_header("index.php",3,_MD_TEAMSORRYRESTRICTEDAREA);
 }
 include(XOOPS_ROOT_PATH."/footer.php");
 ?>

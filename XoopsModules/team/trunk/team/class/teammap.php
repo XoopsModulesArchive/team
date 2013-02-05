@@ -20,7 +20,7 @@ class XoopsMatchMap extends XoopsObject
     //Constructor
 	function XoopsMatchMap($matchid=null, $mapno=null)
 	{
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
 		$this->table = $this->db->prefix("team_matchmaps");
 		if ( is_array($matchid) ) {
 			$this->makeMatchMap($matchid);

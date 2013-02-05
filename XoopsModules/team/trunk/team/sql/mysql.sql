@@ -6,7 +6,7 @@ CREATE TABLE `team_availability` (
   `matchid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`avid`),
   UNIQUE KEY `avid` (`avid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_ladders` (
 `ladderid` TINYINT NOT NULL AUTO_INCREMENT ,
@@ -42,14 +42,14 @@ CREATE TABLE `team_lineups_positions` (
   PRIMARY KEY  (`lineupid`),
   UNIQUE KEY `lineupid` (`lineupid`),
   KEY `lineupid_2` (`lineupid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_mappool` (
   `mapid` int(11) NOT NULL auto_increment,
   `mapname` varchar(25) NOT NULL,
   PRIMARY KEY  (`mapid`),
   UNIQUE KEY `mapid` (`mapid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_matches` (
   `matchid` mediumint(11) unsigned NOT NULL auto_increment,
@@ -67,7 +67,7 @@ CREATE TABLE `team_matches` (
   `alock` tinyint(4) default '0',
   PRIMARY KEY  (`matchid`),
   UNIQUE KEY `matchid` (`matchid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_matchmaps` (
   `matchmapid` int(11) NOT NULL auto_increment,
@@ -91,7 +91,7 @@ CREATE TABLE `team_positions` (
   `posorder` tinyint(4),
   PRIMARY KEY  (`posid`),
   UNIQUE KEY `posid` (`posid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_rank` (
   `rankid` int(11) NOT NULL auto_increment,
@@ -135,7 +135,7 @@ CREATE TABLE `team_skills` (
   `teamid` int(11),
   PRIMARY KEY  (`skillid`),
   UNIQUE KEY `skillid` (`skillid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_status` (
   `statusid` int(11) NOT NULL auto_increment,
@@ -152,7 +152,7 @@ CREATE TABLE `team_tactics` (
   PRIMARY KEY  (`tacid`),
   UNIQUE KEY `tacid` (`tacid`),
   KEY `tacid_2` (`tacid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_tactics_positions` (
   `tacposid` mediumint(8) unsigned NOT NULL auto_increment,
@@ -162,7 +162,7 @@ CREATE TABLE `team_tactics_positions` (
   PRIMARY KEY  (`tacposid`),
   UNIQUE KEY `tacposid` (`tacposid`),
   KEY `tacposid_2` (`tacposid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `team_team` (
   `teamid` int(11) NOT NULL auto_increment,

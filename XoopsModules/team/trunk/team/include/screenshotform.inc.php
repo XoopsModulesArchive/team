@@ -28,14 +28,14 @@ if (!defined("XOOPS_ROOT_PATH")) {
     die("Xoops root path not defined");
 }
 include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
-$mform = new XoopsThemeForm(_AM_SCREENSHOTS, "screenshotform", xoops_getenv('PHP_SELF'));
+$mform = new XoopsThemeForm(_MD_SCREENSHOTS, "screenshotform", xoops_getenv('PHP_SELF'));
 $uid_hidden = new XoopsFormHidden('uid', $xoopsUser->getVar('uid'));
 $mid_hidden = new XoopsFormHidden('mid', $mid);
 
 $matchmap_handler = xoops_getmodulehandler('matchmap', 'team');
 
 // Output list with maps for selected match
-echo "<table width='100%' border='0' cellspacing='1' class='outer'><tr><th>"._AM_TEAMMAPNAME."</th><th>"._AM_TEAMSIDENAME."</th><th>"._AM_SCREENSHOTNAME."</th><th>"._AM_EDIT."</th></tr>";
+echo "<table width='100%' border='0' cellspacing='1' class='outer'><tr><th>"._MD_TEAMMAPNAME."</th><th>"._MD_TEAMSIDENAME."</th><th>"._MD_SCREENSHOTNAME."</th><th>"._MD_EDIT."</th></tr>";
 for ($mapno=1; $mapno <= $nummaps; $mapno++) {
     if ((isset($class))&&($class=="even")) {
         $class = "odd";
@@ -49,10 +49,10 @@ for ($mapno=1; $mapno <= $nummaps; $mapno++) {
 	echo "<td>".getSide($thismap->getVar('side'))."</td>";
 	if (strlen($thismap->getVar('screenshot')) > 0) {
 		echo "<td>".$thismap->getVar('screenshot')."<br /><img src=\"screenshots/thumbs/".$thismap->getVar('screenshot')."\" alt=\"\" border=\"0\" /></td>";
-		echo "<td><a href=\"index.php?op=deletescreenshot&matchmapid=".$thismap->getVar('matchmapid')."\">"._AM_DELETE."</a></td>";
+		echo "<td><a href=\"index.php?op=deletescreenshot&matchmapid=".$thismap->getVar('matchmapid')."\">"._MD_DELETE."</a></td>";
 	} else {
 		echo "<td>&nbsp;</td>";
-		echo "<td><a href=\"index.php?op=screenshotform&action=add&mid=$mid&matchmapid=".$thismap->getVar('matchmapid')."\">"._AM_ADD."</a></td>";
+		echo "<td><a href=\"index.php?op=screenshotform&action=add&mid=$mid&matchmapid=".$thismap->getVar('matchmapid')."\">"._MD_ADD."</a></td>";
 	}
 }
 echo"</table>";

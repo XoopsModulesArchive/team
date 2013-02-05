@@ -4,6 +4,7 @@
 define("_AM_DBUPDATED","Database Updated Successfully!");
 define("_AM_CONFIG","Match Configuration");
 define("_AM_EDIT","Edit");
+define('_AM_ACTION', 'Action');
 define("_AM_DELETE","Delete");
 define("_AM_EDITMATCH","Edit Match");
 define("_AM_RUSUREDEL","Are you sure you want to delete this match and all its comments?");
@@ -213,4 +214,7 @@ define ("_AM_TEAMLAYOUTPERFECTCOLOR", "Perfect Colour");
 define ("_AM_TEAMLAYOUTGOODCOLOR", "Good Colour");
 define ("_AM_TEAMLAYOUTWARNCOLOR", "Warning Colour");
 define ("_AM_TEAMLAYOUTBADCOLOR", "Bad Colour");
-?>
+
+//3.02
+define("_AM_TEAM_SIZE_EDITED_OK", "TeamSize #: %d edited successfully");
+define("_AM_TEAM_SIDE_EDITED_OK", "Side %s edited successfully");

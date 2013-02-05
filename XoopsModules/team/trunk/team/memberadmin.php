@@ -11,10 +11,10 @@ if (isset($_POST)) {
 }
 
 if ($xoopsUser) {
-    $team_handler =& xoops_getmodulehandler('team');
+    $team_handler =& xoops_getmodulehandler('team','team');
     $uid = $xoopsUser->getVar("uid");
     if (!isset($teamid)) {
-        redirect_header("roster.php", 3, _AM_NOTEAMSELECTED);
+        redirect_header("roster.php", 3, _MD_NOTEAMSELECTED);
     }
     else {
         $team =& $team_handler->get($teamid);
@@ -39,7 +39,7 @@ if ($xoopsUser) {
                         }
                     }
                     else {
-                        redirect_header("memberadmin.php?teamid=".$teamid, 2, _AM_TEAMUSERSTATUSNOTUPDATED);
+                        redirect_header("memberadmin.php?teamid=".$teamid, 2, _MD_TEAMUSERSTATUSNOTUPDATED);
                     }
                 }
                 if ($rank != $oldrank) {
@@ -50,15 +50,15 @@ if ($xoopsUser) {
                         }
                     }
                     else {
-                        redirect_header("memberadmin.php?teamid=".$teamid, 2, _AM_TEAMERRORUSERNOTUPDATED);
+                        redirect_header("memberadmin.php?teamid=".$teamid, 2, _MD_TEAMERRORUSERNOTUPDATED);
                     }
                 }
             }
             if (($statuserrors > 0 ) || ($rankerrors > 0)) {
-                redirect_header("memberadmin.php?teamid=".$teamid, 2, $statuserrors." "._AM_TEAMSTATUSERRORS."<br />".$rankerrors." "._AM_TEAMRANKERRORS);
+                redirect_header("memberadmin.php?teamid=".$teamid, 2, $statuserrors." "._MD_TEAMSTATUSERRORS."<br />".$rankerrors." "._MD_TEAMRANKERRORS);
             }
             else {
-                redirect_header("memberadmin.php?teamid=".$teamid, 2, _AM_TEAMUSERRANKUPDATED."<br />"._AM_TEAMUSERSTATUSUPDATED);
+                redirect_header("memberadmin.php?teamid=".$teamid, 2, _MD_TEAMUSERRANKUPDATED."<br />"._MD_TEAMUSERSTATUSUPDATED);
             }
                  break;
 
@@ -112,26 +112,26 @@ if ($xoopsUser) {
             $xoopsTpl->assign('teamtype', $team->getVar('teamtype'));
             $xoopsTpl->assign('allstatus', $statuses);
             $xoopsTpl->assign('allranks', $allranks);
-            $xoopsTpl->assign('lang_administrationof', _AM_TEAMADMINISTRATIONOF);
-            $xoopsTpl->assign('lang_teamplaying', _AM_TEAMPLAYING);
-            $xoopsTpl->assign('lang_teamroster', _AM_TEAMROSTER);
-            $xoopsTpl->assign('lang_posoverview', _AM_TEAMPOSOVERVIEW);
-            $xoopsTpl->assign('lang_teammypos', _AM_TEAMMYPOS);
-            $xoopsTpl->assign('lang_teamavailstats2', _AM_TEAMAVAILSTATS2);
-            $xoopsTpl->assign('lang_teamnickname', _AM_TEAMNICKNAME);
-            $xoopsTpl->assign('lang_teamrank', _AM_TEAMRANK);
-            $xoopsTpl->assign('lang_teamstatus', _AM_TEAMSTATUS);
-            $xoopsTpl->assign('lang_teamtotalmembers', _AM_TEAMTOTALMEMBERS);
-            $xoopsTpl->assign('lang_teamactiveplayers', _AM_TEAMACTIVEPLAYERS);
+            $xoopsTpl->assign('lang_administrationof', _MD_TEAMADMINISTRATIONOF);
+            $xoopsTpl->assign('lang_teamplaying', _MD_TEAMPLAYING);
+            $xoopsTpl->assign('lang_teamroster', _MD_TEAMROSTER);
+            $xoopsTpl->assign('lang_posoverview', _MD_TEAMPOSOVERVIEW);
+            $xoopsTpl->assign('lang_teammypos', _MD_TEAMMYPOS);
+            $xoopsTpl->assign('lang_teamavailstats2', _MD_TEAMAVAILSTATS2);
+            $xoopsTpl->assign('lang_teamnickname', _MD_TEAMNICKNAME);
+            $xoopsTpl->assign('lang_teamrank', _MD_TEAMRANK);
+            $xoopsTpl->assign('lang_teamstatus', _MD_TEAMSTATUS);
+            $xoopsTpl->assign('lang_teamtotalmembers', _MD_TEAMTOTALMEMBERS);
+            $xoopsTpl->assign('lang_teamactiveplayers', _MD_TEAMACTIVEPLAYERS);
             break;
           }
     }
     else {
-        redirect_header("roster.php", 3, _AM_TEAMNOACCESSTOTHISTEAM);
+        redirect_header("roster.php", 3, _MD_TEAMNOACCESSTOTHISTEAM);
     }
 }
 else {
-    redirect_header("index.php", 3, _AM_TEAMNOTLOGGEDIN);
+    redirect_header("index.php", 3, _MD_TEAMNOTLOGGEDIN);
 }
 include_once(XOOPS_ROOT_PATH."/footer.php");
 ?>

@@ -14,7 +14,7 @@ class TeamTacticsPosition extends XoopsObject
     //Constructor
 	function TeamTacticsPosition($tacposid=0)
 	{
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
         $this->initVar('tacposid', XOBJ_DTYPE_INT);
         $this->initVar('tacid', XOBJ_DTYPE_INT);
         $this->initVar('posid', XOBJ_DTYPE_INT);

@@ -24,7 +24,7 @@ class TeamMatchMap extends XoopsObject
 	    $this->initVar('general', XOBJ_DTYPE_TXTAREA);
 	    $this->initVar('screenshot', XOBJ_DTYPE_TXTBOX, "");
 
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
 	}
 
     //Find winner of a map
@@ -86,7 +86,7 @@ class TeamMatchMapHandler extends XoopsPersistableObjectHandler {
             foreach (array_keys($objs) as $i) {
                 $mapids[] = $objs[$i]->getVar('mapid');
             }
-            $map_handler = xoops_getmodulehandler('map');
+            $map_handler = xoops_getmodulehandler('map','team');
             $maps = $map_handler->getObjects(new Criteria("mapid", "(".implode(',', array_unique($mapids)).")", "IN"), true);
             foreach (array_keys($objs) as $i) {
                 $objs[$i]->map = isset($maps[$objs[$i]->getVar('mapid')]) ? $maps[$objs[$i]->getVar('mapid')] : $map_handler->create(false);

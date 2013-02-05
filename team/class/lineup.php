@@ -64,7 +64,7 @@ class Lineup extends XoopsObject
     }
 
     function show() {
-        $team_handler =& xoops_getmodulehandler('team');
+        $team_handler =& xoops_getmodulehandler('team','team');
         $team =& $team_handler->get($this->getVar('teamid'));
         echo "<table border='0' cellpadding='0' cellspacing='0' valign='top' width='100%'>";
         echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";

@@ -10,7 +10,7 @@ class XoopsMatch extends XoopsObject
     //Constructor
 	function XoopsMatch($matchid=-1)
 	{
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
 		$this->table = $this->db->prefix("team_matches");
 		$this->initVar('matchid', XOBJ_DTYPE_INT);
 		$this->initVar('uid', XOBJ_DTYPE_INT);

@@ -40,7 +40,7 @@ if (isset($_POST)) {
         ${$k} = $v;
     }
 }
-$tactics_handler =& xoops_getmodulehandler('tactics');
+$tactics_handler =& xoops_getmodulehandler('tactics','team');
 if ($xoopsUser) {
     $uid = $xoopsUser->getVar("uid");
     if (!isset($teamid)) {
@@ -51,7 +51,7 @@ if ($xoopsUser) {
                 $teamid = $teamid;
             }
             if (!isset($teamid)) {
-                redirect_header("index.php", 3, _AM_TEAMACCESSDENY);
+                redirect_header("index.php", 3, _MD_TEAMACCESSDENY);
             }
         }
         else {
@@ -59,7 +59,7 @@ if ($xoopsUser) {
             $teamid = $tactic->getVar('teamid');
         }
     }
-    $team_handler =& xoops_getmodulehandler('team');
+    $team_handler =& xoops_getmodulehandler('team','team');
     $team =& $team_handler->get($teamid);
     if ($team->isTacticsAdmin($uid)) {
         $admin = 'Yes';
@@ -76,7 +76,7 @@ if ($xoopsUser) {
                     $tactic->show();
                 }
                 else {
-                    redirect_header("tactics.php",2,_AM_TEAMNOTACTICSSEL);
+                    redirect_header("tactics.php",2,_MD_TEAMNOTACTICSSEL);
                     break;
                 }
                 break;
@@ -93,15 +93,15 @@ if ($xoopsUser) {
                 }
                 $teamsize = $tactic->getVar('teamsize');
                 include XOOPS_ROOT_PATH."/class/xoopsformloader.php";
-                $mform = new XoopsThemeForm($teamsize." "._AM_TEAMVERSUS." ".$teamsize." "._AM_TEAMTACTICSFOR." ".$team->getVar('teamname')." "._AM_TEAMON." ".(is_object($tactic->map) ? $tactic->map->getVar('mapname') : "??"), "savetactics", xoops_getenv('PHP_SELF'));
-                $general = new XoopsFormTextArea(_AM_TEAMGENERALTACS, "general", $tactic->getVar('general'));
+                $mform = new XoopsThemeForm($teamsize." "._MD_TEAMVERSUS." ".$teamsize." "._MD_TEAMTACTICSFOR." ".$team->getVar('teamname')." "._MD_TEAMON." ".(is_object($tactic->map) ? $tactic->map->getVar('mapname') : "??"), "savetactics", xoops_getenv('PHP_SELF'));
+                $general = new XoopsFormTextArea(_MD_TEAMGENERALTACS, "general", $tactic->getVar('general'));
                 $teampositions = $team->getPositions();
                 if ($tactic->getVar('tacid')) {
                     $tacticspositions = $tactic->getPositions();
                 }
                 $mform->addElement($general);
                 $tacpos = "";
-                $position_handler =& xoops_getmodulehandler('tacticsposition');
+                $position_handler =& xoops_getmodulehandler('tacticsposition','team');
                 for ($i=0;$i<$teamsize;$i++) {
                     if (isset($tacticspositions[$i])) {
                         $thispos =& $position_handler->get($tacticspositions[$i]);
@@ -113,11 +113,11 @@ if ($xoopsUser) {
                         $thisposid = 0;
                         $thisposdesc = "";
                     }
-                    $position_select[$i] = new XoopsFormSelect(_AM_TEAMPOSITION .($i+1), "posid[".$i."]", $thisposid);
+                    $position_select[$i] = new XoopsFormSelect(_MD_TEAMPOSITION .($i+1), "posid[".$i."]", $thisposid);
                     foreach ($teampositions as $positionid => $positionname) {
                         $position_select[$i]->addOption($positionid, $positionname);
                     }
-                    $description[$i] = new XoopsFormTextArea(_AM_TEAMDESCRIPTION, "posdesc[".$i."]", $thisposdesc);
+                    $description[$i] = new XoopsFormTextArea(_MD_TEAMDESCRIPTION, "posdesc[".$i."]", $thisposdesc);
                     $mform->addElement($position_select[$i]);
                     $mform->addElement($description[$i]);
                 }
@@ -157,7 +157,7 @@ if ($xoopsUser) {
                     $tacid = $tactic->getVar('tacid');
                     $tacpos=explode(":",$tacpos);
                     $tacserrors = 0;
-                    $position_handler =& xoops_getmodulehandler('tacticsposition');
+                    $position_handler =& xoops_getmodulehandler('tacticsposition','team');
                     for ($i=0;$i<$teamsize;$i++) {
                         $thispos =& $position_handler->create();
                         if (isset($tacpos[$i]) && $tacpos[$i]) {
@@ -172,19 +172,19 @@ if ($xoopsUser) {
                         }
                     }
                     if ($tacserrors > 0) {
-                        redirect_header("tactics.php?teamid=".$teamid, 3, $tacserrors._AM_TEAMTACTICSERRORS);
+                        redirect_header("tactics.php?teamid=".$teamid, 3, $tacserrors._MD_TEAMTACTICSERRORS);
                     }
                     else {
                         if ($action == 'Add') {
-                            redirect_header("tactics.php?teamid=".$teamid,3,_AM_TEAMTACTICSADDED);
+                            redirect_header("tactics.php?teamid=".$teamid,3,_MD_TEAMTACTICSADDED);
                         }
                         else {
-                            redirect_header("tactics.php?teamid=".$teamid,3,_AM_TEAMTACTICSEDITED);
+                            redirect_header("tactics.php?teamid=".$teamid,3,_MD_TEAMTACTICSEDITED);
                         }
                     }
                 }
                 else {
-                    redirect_header("tactics.php?teamid=".$teamid,3, _AM_TEAMGENERALTACSERROR);
+                    redirect_header("tactics.php?teamid=".$teamid,3, _MD_TEAMGENERALTACSERROR);
                 }
                 break;
 
@@ -226,11 +226,11 @@ if ($xoopsUser) {
         }
     }
     else {
-        redirect_header("index.php?teamid=".$teamid,3,_AM_TEAMACCESSDENY);
+        redirect_header("index.php?teamid=".$teamid,3,_MD_TEAMACCESSDENY);
     }
 }
 else {
-    redirect_header("index.php?teamid=".$teamid,3,_AM_TEAMMEMBAREA);
+    redirect_header("index.php?teamid=".$teamid,3,_MD_TEAMMEMBAREA);
 }
 include_once XOOPS_ROOT_PATH.'/footer.php';
 ?>

@@ -8,7 +8,7 @@ include_once XOOPS_ROOT_PATH . '/modules/' . $xoopsModule->dirname() . '/class/p
 $xoopsOption['template_main'] = 'team_userprofile.html';
 $uid = intval($_GET['uid']);
 if ($uid <= 0) {
-	redirect_header('index.php', 3, _AM_TEAM_SELECTNG);
+	redirect_header('index.php', 3, _MD_TEAM_SELECTNG);
 	exit();
 }
 if (is_object($xoopsUser)) {
@@ -20,7 +20,7 @@ if (is_object($xoopsUser)) {
 		$member_handler =& xoops_gethandler('member');
 		$thisUser =& $member_handler->getUser($uid);
 		if (!is_object($thisUser) || !$thisUser->isActive() ) {
-			redirect_header("index.php",3,_AM_TEAM_SELECTNG);
+			redirect_header("index.php",3,_MD_TEAM_SELECTNG);
 			exit();
 		}
 		$xoopsTpl->assign('user_ownpage', false);
@@ -29,7 +29,7 @@ if (is_object($xoopsUser)) {
 	$member_handler =& xoops_gethandler('member');
 	$thisUser =& $member_handler->getUser($uid);
 	if (!is_object($thisUser) || !$thisUser->isActive()) {
-		redirect_header("index.php",3,_AM_TEAM_SELECTNG);
+		redirect_header("index.php",3,_MD_TEAM_SELECTNG);
 		exit();
 	}
 	$xoopsTpl->assign('user_ownpage', false);
@@ -38,7 +38,7 @@ $myts =& MyTextSanitizer::getInstance();
 if (is_object($xoopsUser) && $xoopsUser->isAdmin()) {
 	$xoopsTpl->assign('user_uid', $thisUser->getVar('uid'));
 }
-$xoopsTpl->assign('lang_allaboutuser', sprintf(_AM_TEAM_ALLABOUT,$thisUser->getVar('uname')));
+$xoopsTpl->assign('lang_allaboutuser', sprintf(_MD_TEAM_ALLABOUT,$thisUser->getVar('uname')));
 $xoopsTpl->assign('user_avatarurl', XOOPS_URL.'/uploads/'.$thisUser->getVar('user_avatar'));
 $xoopsTpl->assign('user_realname', $thisUser->getVar('name'));
 $xoopsTpl->assign('user_websiteurl', '<a href="'.$thisUser->getVar('url', 'E').'" target="_blank">'.$thisUser->getVar('url').'</a>');
@@ -82,7 +82,7 @@ if (!empty($date)) {
 $thisPlayer = new Player($thisUser->getVar("uid"));
 $playerteams = $thisPlayer->getTeams();
 $skills = array();
-$team_handler =& xoops_getmodulehandler('team');
+$team_handler =& xoops_getmodulehandler('team','team');
 foreach ($playerteams as $statusid => $teamid) {
     $team =& $team_handler->get($teamid);
     $sql = "SELECT primarypos, secondarypos, tertiarypos FROM ".$xoopsDB->prefix("team_teamstatus")." WHERE uid=".$thisUser->getVar("uid")." AND teamid=".$teamid;
@@ -102,7 +102,7 @@ foreach ($playerteams as $statusid => $teamid) {
     $teamrank = $teamrank["rank"];
     $xoopsTpl->append('thisteam', array('name' => $team->getVar('teamname'), 'teamrank' => $teamrank, 'teamstatus' => getPlayerStatus($statusid), 'primary' => $primary, 'secondary' => $secondary, 'tertiary' => $tertiary, 'skills' => $skills));
 }
-$xoopsTpl->assign('lang_profileforuser', _AM_TEAMPROFILEFOR." ".$thisUser->getVar("uname"));
+$xoopsTpl->assign('lang_profileforuser', _MD_TEAMPROFILEFOR." ".$thisUser->getVar("uname"));
 
 if ($xoopsUser) {
       $teams = getTeams();
@@ -116,7 +116,7 @@ if ($xoopsUser) {
       if ($teammember==1) {
           $match[0] = $thisPlayer->getAvailabilities(1);
           $match[1] = $thisPlayer->getAvailabilities("");
-          $match_handler =& xoops_getmodulehandler('match');
+          $match_handler =& xoops_getmodulehandler('match','team');
           foreach ($match as $matches) {
 
               if (count($matches)>0) {

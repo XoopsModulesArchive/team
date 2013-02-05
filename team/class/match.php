@@ -15,7 +15,7 @@ class TeamMatch extends XoopsObject
     //Constructor
 	function TeamMatch($matchid=-1)
 	{
-		$this->db =& Database::getInstance();
+		$this->db =& XoopsDatabaseFactory::getDatabaseConnection();
 		$this->table = $this->db->prefix("team_matches");
 		$this->initVar('matchid', XOBJ_DTYPE_INT);
 		$this->initVar('uid', XOBJ_DTYPE_INT);
@@ -33,7 +33,7 @@ class TeamMatch extends XoopsObject
 		if ( is_array($matchid) ) {
 			$this->assignVars($matchid);
 		} elseif ( $matchid != -1 ) {
-		    $match_handler =& xoops_getmodulehandler('match');
+		    $match_handler =& xoops_getmodulehandler('match','team');
             $match =& $match_handler->get($matchid);
             foreach ($match->vars as $k => $v) {
                 $this->assignVar($k, $v['value']);

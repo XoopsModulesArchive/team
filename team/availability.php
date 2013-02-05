@@ -60,7 +60,7 @@ function comment($val1, $comm, $val2="") {
     echo "<input type='hidden' name='matchid' value=".$matchid.">";
     echo "<input type='hidden' name='userid' value=".$userid.">";
     echo "<input type='hidden' name='avid' value=".$avid.">";
-    echo ""._AM_TEAMSUBREASSHORTEXPL." </td><td><input type='text' name='newcomment' value='".$comm."' size=20>";
+    echo ""._MD_TEAMSUBREASSHORTEXPL." </td><td><input type='text' name='newcomment' value='".$comm."' size=20>";
     echo "</td><td><input type=submit value='Submit'></form></td></tr></table>";
 }
 function setcomment($mid, $uid, $aid, $comment) {
@@ -80,21 +80,21 @@ function setcomment($mid, $uid, $aid, $comment) {
 
 
 if ($xoopsUser) {
-    $match_handler =& xoops_getmodulehandler('match');
+    $match_handler =& xoops_getmodulehandler('match','team');
     switch ($op) {
         case "reset":
         if ( !empty($ok) ) {
             if (empty($matchid)) {
-                redirect_header('index.php',2,_AM_EMPTYNORESET);
+                redirect_header('index.php',2,_MD_EMPTYNORESET);
                 break;
             }
             $matchid = intval($matchid);
-            $availability_handler = xoops_getmodulehandler('availability');
+            $availability_handler = xoops_getmodulehandler('availability','team');
             $availability_handler->updateAll("availability", "Not Set", new Criteria("matchid", $matchid));
-            redirect_header("availability.php?mid=".$matchid, 3, _AM_AVSRESAT);
+            redirect_header("availability.php?mid=".$matchid, 3, _MD_AVSRESAT);
         }
         else {
-            xoops_confirm(array('op' => 'reset', 'matchid' => $matchid, 'ok' => 1), 'availability.php', _AM_RUSURERESET);
+            xoops_confirm(array('op' => 'reset', 'matchid' => $matchid, 'ok' => 1), 'availability.php', _MD_RUSURERESET);
         }
         break;
         case "lock":
@@ -115,7 +115,7 @@ if ($xoopsUser) {
             $availability = $availability_handler->get($avid);
             $matchid = $availability->getVar('matchid');
         }
-        redirect_header("availability.php?mid=".$matchid,3,_AM_TEAMAVAILABILITYSET);
+        redirect_header("availability.php?mid=".$matchid,3,_MD_TEAMAVAILABILITYSET);
         break;
 
         case "set":
@@ -124,11 +124,11 @@ if ($xoopsUser) {
                 comment($userid, $comment, $matchid);
             }
             else {
-                redirect_header("availability.php?mid=".$matchid,3,_AM_TEAMAVAILABILITYSET);
+                redirect_header("availability.php?mid=".$matchid,3,_MD_TEAMAVAILABILITYSET);
             }
         }
         else {
-            redirect_header("availability.php?mid=".$matchid, 3, _AM_DBNOTUPDATED);
+            redirect_header("availability.php?mid=".$matchid, 3, _MD_DBNOTUPDATED);
         }
         break;
 
@@ -138,24 +138,24 @@ if ($xoopsUser) {
         $criteria = new CriteriaCompo(new Criteria("userid", intval($uid)));
         $criteria->add(new Criteria("matchid", intval($matchid)));
         if (!$availability_handler->updateAll("availability", MyTextSanitizer::addSlashes($availability), $criteria)) {
-            redirect_header("availability.php?mid=".$matchid,3,_AM_TEAMERRORUSERNOTUPDATED);
+            redirect_header("availability.php?mid=".$matchid,3,_MD_TEAMERRORUSERNOTUPDATED);
         }
         else {
-            redirect_header("availability.php?mid=".$matchid,3,_AM_TEAMAVAILABILITYMODIFIED);
+            redirect_header("availability.php?mid=".$matchid,3,_MD_TEAMAVAILABILITYMODIFIED);
         }
         break;
 
-        case _AM_TEAMCHANGE."" :
+        case _MD_TEAMCHANGE."" :
         if (change($avid, $availability, $matchid)) {
             if ($availability=='Sub') {
                 comment($avid, $comment);
             }
             else {
-                redirect_header("availability.php?mid=".$matchid,3,_AM_TEAMAVAILABILITYMODIFIED);
+                redirect_header("availability.php?mid=".$matchid,3,_MD_TEAMAVAILABILITYMODIFIED);
             }
         }
         else {
-            redirect_header("availability.php?mid=".$matchid, 3, _AM_DBNOTUPDATED);
+            redirect_header("availability.php?mid=".$matchid, 3, _MD_DBNOTUPDATED);
         }
         break;
 
@@ -171,10 +171,10 @@ if ($xoopsUser) {
             'bad' => $thislayout["color_bad"]));
             $mymatch =& $match_handler->get($mid);
             $teamid = $mymatch->getVar('teamid');
-            $team_handler =& xoops_getmodulehandler('team');
+            $team_handler =& xoops_getmodulehandler('team','team');
             $myteam =& $team_handler->get($teamid);
             if ((!$myteam->isTeamMember($xoopsUser->getVar("uid"))) && (!$xoopsUser->isAdmin($xoopsModule->mid()))) {
-                redirect_header("index.php?teamid=".$teamid, 3, _AM_TEAMACCESSDENY);
+                redirect_header("index.php?teamid=".$teamid, 3, _MD_TEAMACCESSDENY);
                 break;
             }
             $mdate = $mymatch->getVar('matchdate');
@@ -192,25 +192,25 @@ if ($xoopsUser) {
             }
             $firstday = date( 'w', $mdate);
             if ($firstday==1) {
-                $weekday=_AM_TEAMMONDAY;
+                $weekday=_MD_TEAMMONDAY;
             }
             elseif ($firstday==2) {
-                $weekday=_AM_TEAMTUESDAY;
+                $weekday=_MD_TEAMTUESDAY;
             }
             elseif ($firstday==3) {
-                $weekday=_AM_TEAMWEDNESDAY;
+                $weekday=_MD_TEAMWEDNESDAY;
             }
             elseif ($firstday==4) {
-                $weekday=_AM_TEAMTHURSDAY;
+                $weekday=_MD_TEAMTHURSDAY;
             }
             elseif ($firstday==5) {
-                $weekday=_AM_TEAMFRIDAY;
+                $weekday=_MD_TEAMFRIDAY;
             }
             elseif ($firstday==6) {
-                $weekday=_AM_TEAMSATURDAY;
+                $weekday=_MD_TEAMSATURDAY;
             }
             else {
-                $weekday=_AM_TEAMSUNDAY;
+                $weekday=_MD_TEAMSUNDAY;
             }
             $lock=$mymatch->getVar('alock');
             if ($mymatch->getVar('matchresult')=='Pending') {
@@ -223,6 +223,7 @@ if ($xoopsUser) {
             $noreply=0;
             $lateyes=0;
             $lateno=0;
+            $notreplied=0;
             $avid = array();
             $navid = array();
             $subid = array();
@@ -330,6 +331,7 @@ if ($xoopsUser) {
                 $notreplied[]["name"] = "&nbsp ";
                 $i++;
             }
+            $uid=0;
             //Availability Setup for teammembers only
             if ($myteam->isTeamMember($xoopsUser->getVar("uid"))) {
                 $uid = $xoopsUser->getVar("uid");
@@ -337,36 +339,36 @@ if ($xoopsUser) {
                 $action = "set";
                 if (isset($pending) && ($pending==1)) {
                     if (isset($myav)) {
-                        $action = _AM_TEAMCHANGE."";
+                        $action = _MD_TEAMCHANGE."";
                         if ($myav=="Yes") {
                             $xoopsTpl->assign('avcheck', "selected");
                             $xoopsTpl->assign('navcheck', "");
                             $xoopsTpl->assign('subcheck', "");
-                            $xoopsTpl->assign('greeting', _AM_TEAMHELLO." ".$uname.", "._AM_TEAMYOUSETAVAIL);
+                            $xoopsTpl->assign('greeting', _MD_TEAMHELLO." ".$uname.", "._MD_TEAMYOUSETAVAIL);
                         }
                         elseif ($myav=="No") {
                             $xoopsTpl->assign('avcheck', "");
                             $xoopsTpl->assign('navcheck', "selected");
                             $xoopsTpl->assign('subcheck', "");
-                            $xoopsTpl->assign('greeting', _AM_TEAMHELLO." ".$uname.", "._AM_TEAMYOUSETNOTAVAIL);
+                            $xoopsTpl->assign('greeting', _MD_TEAMHELLO." ".$uname.", "._MD_TEAMYOUSETNOTAVAIL);
                         }
                         elseif ($myav=="Sub") {
                             $xoopsTpl->assign('avcheck', "");
                             $xoopsTpl->assign('navcheck', "");
                             $xoopsTpl->assign('subcheck', "selected");
-                            $xoopsTpl->assign('greeting', _AM_TEAMHELLO." ".$uname.", "._AM_TEAMYOUSETSUB);
+                            $xoopsTpl->assign('greeting', _MD_TEAMHELLO." ".$uname.", "._MD_TEAMYOUSETSUB);
                         }
                         else {
-                            $xoopsTpl->assign('greeting', _AM_TEAMHELLO." ".$uname.", "._AM_TEAMYOUHAVENOTSETAVAIL);
+                            $xoopsTpl->assign('greeting', _MD_TEAMHELLO." ".$uname.", "._MD_TEAMYOUHAVENOTSETAVAIL);
                         }
                     }
                     if ($lock==1) {
-                        $xoopsTpl->assign('greeting', _AM_TEAMAVAILHASLOCKADMIN);
+                        $xoopsTpl->assign('greeting', _MD_TEAMAVAILHASLOCKADMIN);
                     }
                     $xoopsTpl->assign('action', $action);
                 }
                 else {
-                    $xoopsTpl->assign('greeting', _AM_TEAMMATCHPLAYED);
+                    $xoopsTpl->assign('greeting', _MD_TEAMMATCHPLAYED);
                 }
                 $xoopsTpl->assign('uname', $uname);
                 $xoopsTpl->assign('uid', $uid);
@@ -407,32 +409,32 @@ if ($xoopsUser) {
             $xoopsTpl->assign('maps', $map);
             $xoopsTpl->assign('lock', $lock);
             $xoopsTpl->assign('day', date(_SHORTDATESTRING, $mdate));
-            $xoopsTpl->assign('lang_teammatchlist', _AM_TEAMMATCHLIST);
-            $xoopsTpl->assign('lang_teammatchdetails', _AM_TEAMMATCHDETAILS);
-            $xoopsTpl->assign('lang_teammatchpositions', _AM_TEAMMATCHPOSITIONS);
-            $xoopsTpl->assign('lang_against', _AM_TEAMAGAINST);
-            $xoopsTpl->assign('lang_teamat', _AM_TEAMAT);
-            $xoopsTpl->assign('lang_teamvs', _AM_TEAMVERSUS);
-            $xoopsTpl->assign('lang_teamavailable', _AM_TEAMAVAILABLE);
-            $xoopsTpl->assign('lang_teamnotavailable', _AM_TEAMNOTAVAILABLE);
-            $xoopsTpl->assign('lang_teamsubs', _AM_TEAMSUBS);
-            $xoopsTpl->assign('lang_teamlatepositive', _AM_TEAMLATEPOSITIVE);
-            $xoopsTpl->assign('lang_teamlatenegative', _AM_TEAMLATENEGATIVE);
-            $xoopsTpl->assign('lang_teamnoreply', _AM_TEAMNOREPLY);
-            $xoopsTpl->assign('lang_teamsub', _AM_TEAMSUB);
-            $xoopsTpl->assign('lang_teamlockavail', _AM_TEAMLOCKAVAIL);
-            $xoopsTpl->assign('lang_teamunlockavail', _AM_TEAMUNLOCKAVAIL);
-            $xoopsTpl->assign('lang_teamresetavail', _AM_TEAMRESETAVAIL);
-            $xoopsTpl->assign('lang_teamoverride', _AM_TEAMOVERRIDE);
+            $xoopsTpl->assign('lang_teammatchlist', _MD_TEAMMATCHLIST);
+            $xoopsTpl->assign('lang_teammatchdetails', _MD_TEAMMATCHDETAILS);
+            $xoopsTpl->assign('lang_teammatchpositions', _MD_TEAMMATCHPOSITIONS);
+            $xoopsTpl->assign('lang_against', _MD_TEAMAGAINST);
+            $xoopsTpl->assign('lang_teamat', _MD_TEAMAT);
+            $xoopsTpl->assign('lang_teamvs', _MD_TEAMVERSUS);
+            $xoopsTpl->assign('lang_teamavailable', _MD_TEAMAVAILABLE);
+            $xoopsTpl->assign('lang_teamnotavailable', _MD_TEAMNOTAVAILABLE);
+            $xoopsTpl->assign('lang_teamsubs', _MD_TEAMSUBS);
+            $xoopsTpl->assign('lang_teamlatepositive', _MD_TEAMLATEPOSITIVE);
+            $xoopsTpl->assign('lang_teamlatenegative', _MD_TEAMLATENEGATIVE);
+            $xoopsTpl->assign('lang_teamnoreply', _MD_TEAMNOREPLY);
+            $xoopsTpl->assign('lang_teamsub', _MD_TEAMSUB);
+            $xoopsTpl->assign('lang_teamlockavail', _MD_TEAMLOCKAVAIL);
+            $xoopsTpl->assign('lang_teamunlockavail', _MD_TEAMUNLOCKAVAIL);
+            $xoopsTpl->assign('lang_teamresetavail', _MD_TEAMRESETAVAIL);
+            $xoopsTpl->assign('lang_teamoverride', _MD_TEAMOVERRIDE);
         }
         else {
-            redirect_header("index.php",3,_AM_TEAMNOMATCHSELECTED);
+            redirect_header("index.php",3,_MD_TEAMNOMATCHSELECTED);
         }
         break;
     }
 }
 else {
-    redirect_header("../../index.php",3,_AM_TEAMSORRYRESTRICTEDAREA);
+    redirect_header("../../index.php",3,_MD_TEAMSORRYRESTRICTEDAREA);
 }
 include(XOOPS_ROOT_PATH."/footer.php");
 ?>

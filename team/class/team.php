@@ -25,7 +25,7 @@ class TeamTeam extends XoopsObject
         $sql = "SELECT * FROM ".$this->db->prefix("team_matches")." WHERE teamid= ".$this->getVar('teamid')." ORDER BY matchdate DESC ".$clause." ";
         $result = $this->db->query($sql);
         $matches = array();
-        $match_handler =& xoops_getmodulehandler('match');
+        $match_handler =& xoops_getmodulehandler('match','team');
         while ($row = $this->db->fetchArray($result)) {
             $thismatch =& $match_handler->create(false);
             $thismatch->assignVars($row);

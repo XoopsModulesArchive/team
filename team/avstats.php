@@ -10,10 +10,10 @@ if ($xoopsUser) {
     }
     include_once XOOPS_ROOT_PATH.'/class/module.textsanitizer.php';
     $xoopsOption['template_main'] = 'team_avstats.html';
-    $team_handler =& xoops_getmodulehandler('team');
+    $team_handler =& xoops_getmodulehandler('team','team');
     $team =& $team_handler->get($teamid);
     if (!$team->isTeamMember($xoopsUser->getVar("uid"))) {
-        redirect_header('roster.php?teamid='.$teamid, 3, _AM_TEAMACCESSDENY);
+        redirect_header('roster.php?teamid='.$teamid, 3, _MD_TEAMACCESSDENY);
         exit();
     }
     if (isset($limit)) {
@@ -149,39 +149,39 @@ if ($xoopsUser) {
     }
     $xoopsTpl->assign('teamid', $teamid);
     $xoopsTpl->assign('teamname', $team->getVar('teamname'));
-    $xoopsTpl->assign('lang_teamroster', _AM_TEAMROSTER);
-    $xoopsTpl->assign('lang_teamadmin', _AM_TEAMADMIN);
-    $xoopsTpl->assign('lang_teamavailstats', _AM_TEAMAVAILSTATS);
-    $xoopsTpl->assign('lang_teamplaying', _AM_TEAMPLAYING);
-    $xoopsTpl->assign('lang_teamposoverview', _AM_TEAMPOSOVERVIEW);
-    $xoopsTpl->assign('lang_teammypos', _AM_TEAMMYPOS);
-    $xoopsTpl->assign('lang_teamnickname', _AM_TEAMNICKNAME);
-    $xoopsTpl->assign('lang_teamstatus', _AM_TEAMSTATUS);
-    $xoopsTpl->assign('lang_teammatches', _AM_TEAMMATCHES);
-    $xoopsTpl->assign('lang_teamavailable', _AM_TEAMAVAILABLE);
-    $xoopsTpl->assign('lang_teamnotavailable', _AM_TEAMNOTAVAILABLE);
-    $xoopsTpl->assign('lang_teamsub', _AM_TEAMSUB);
-    $xoopsTpl->assign('lang_teamnoreply', _AM_TEAMNOREPLY);
+    $xoopsTpl->assign('lang_teamroster', _MD_TEAMROSTER);
+    $xoopsTpl->assign('lang_teamadmin', _MD_TEAMADMIN);
+    $xoopsTpl->assign('lang_teamavailstats', _MD_TEAMAVAILSTATS);
+    $xoopsTpl->assign('lang_teamplaying', _MD_TEAMPLAYING);
+    $xoopsTpl->assign('lang_teamposoverview', _MD_TEAMPOSOVERVIEW);
+    $xoopsTpl->assign('lang_teammypos', _MD_TEAMMYPOS);
+    $xoopsTpl->assign('lang_teamnickname', _MD_TEAMNICKNAME);
+    $xoopsTpl->assign('lang_teamstatus', _MD_TEAMSTATUS);
+    $xoopsTpl->assign('lang_teammatches', _MD_TEAMMATCHES);
+    $xoopsTpl->assign('lang_teamavailable', _MD_TEAMAVAILABLE);
+    $xoopsTpl->assign('lang_teamnotavailable', _MD_TEAMNOTAVAILABLE);
+    $xoopsTpl->assign('lang_teamsub', _MD_TEAMSUB);
+    $xoopsTpl->assign('lang_teamnoreply', _MD_TEAMNOREPLY);
     if (isset($limit)) {
         if ($limit==20) {
             $xoopsTpl->assign('link1', '?limit=10');
-            $xoopsTpl->assign('link1txt', _AM_TEAMLAST10MATCHES);
+            $xoopsTpl->assign('link1txt', _MD_TEAMLAST10MATCHES);
             $xoopsTpl->assign('link2', '');
-            $xoopsTpl->assign('link2txt', _AM_TEAMALLMATCHES);
+            $xoopsTpl->assign('link2txt', _MD_TEAMALLMATCHES);
         }
         elseif ($limit==10) {
             $xoopsTpl->assign('link2', '?limit=20');
-            $xoopsTpl->assign('link2txt', _AM_TEAMLAST20MATCHES);
+            $xoopsTpl->assign('link2txt', _MD_TEAMLAST20MATCHES);
             $xoopsTpl->assign('link1', '');
-            $xoopsTpl->assign('link1txt', _AM_TEAMALLMATCHES);
+            $xoopsTpl->assign('link1txt', _MD_TEAMALLMATCHES);
         }
 
     }
     else {
         $xoopsTpl->assign('link1', '?limit=10');
-        $xoopsTpl->assign('link1txt', _AM_TEAMLAST10MATCHES);
+        $xoopsTpl->assign('link1txt', _MD_TEAMLAST10MATCHES);
         $xoopsTpl->assign('link2', '?limit=20');
-        $xoopsTpl->assign('link2txt', _AM_TEAMLAST20MATCHES);
+        $xoopsTpl->assign('link2txt', _MD_TEAMLAST20MATCHES);
     }
 }
 include(XOOPS_ROOT_PATH."/footer.php");

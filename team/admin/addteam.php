@@ -1,10 +1,11 @@
 <?php
+require_once "admin_header.php";
 include '../../../include/cp_header.php';
 include "functions.php";
 
 xoops_cp_header();
 if (isset($teamid)) {
-    $team_handler =& xoops_getmodulehandler('team');
+    $team_handler =& xoops_getmodulehandler('team','team');
     $team =& $team_handler->get($teamid);
     $teamname = $team->getVar('teamname');
     $teamtype = $team->getVar('teamtype');
@@ -23,7 +24,7 @@ echo "<tr><td class='bg6'><table width='100%' border='0' cellpadding='0' cellspa
 echo "<tr class='bg6'><td><img src='".XOOPS_ROOT_PATH."/images/addteam.gif'></td>";
 echo "</tr></table>";
 echo "<table width='100%' border='0' cellpadding='4' cellspacing='1'>
-          <form method='post' action='index.php' ENCTYPE=\"multipart/form-data\" NAME=\"Add\">
+          <form method='post' action='main.php' ENCTYPE=\"multipart/form-data\" NAME=\"Add\">
           <input type='hidden' name='op' value='saveteam'>";
 echo "<input type='hidden' name='created' value=".time().">";
 echo "<input type='hidden' name='uid' value=".$uid.">";

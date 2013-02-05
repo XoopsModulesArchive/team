@@ -10,7 +10,7 @@ if (isset($_POST)) {
 		${$k} = $v;
 	}
 }
-$team_handler =& xoops_getmodulehandler('team');
+$team_handler =& xoops_getmodulehandler('team','team');
 if ($xoopsUser) {
    if (isset($submit)) {
        $team =& $team_handler->get($teamid);
@@ -30,10 +30,10 @@ if ($xoopsUser) {
                    $xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("team_skills")." (uid, posid, teamid) VALUES ('$uid', '$skillid', '$teamid')");
                }
            }
-           redirect_header("positions.php?teamid=".$teamid,3, _AM_TEAMPSSKILLSUPDATE);
+           redirect_header("positions.php?teamid=".$teamid,3, _MD_TEAMPSSKILLSUPDATE);
        }
        else {
-           redirect_header("positions.php?teamid=".$teamid,3, _AM_TEAMACCESSDENY);
+           redirect_header("positions.php?teamid=".$teamid,3, _MD_TEAMACCESSDENY);
        }
    }
   else {
@@ -45,10 +45,10 @@ if ($xoopsUser) {
    echo "<tr><td><table width='100%' border='0' cellpadding='0' cellspacing='0'>";
    echo "<tr class='head'><td align='right'>";
    if (($xoopsUser->isAdmin($xoopsModule->mid()))||($team->isTeamAdmin($xoopsUser->getVar("uid")))) {
-       echo "<a href='memberadmin.php?teamid=".$teamid."'>"._AM_TEAMADMIN."</a> | ";
+       echo "<a href='memberadmin.php?teamid=".$teamid."'>"._MD_TEAMADMIN."</a> | ";
    }
-   echo "<a href='roster.php?teamid=".$teamid."'>"._AM_TEAMROSTER."</a> | ";
-   echo "<a href='positions.php?teamid=".$teamid."'>"._AM_TEAMPOSOVERVIEW."</a> | <a href='avstats.php?teamid=".$teamid."'>"._AM_TEAMAVAILSTATS2."</a>";
+   echo "<a href='roster.php?teamid=".$teamid."'>"._MD_TEAMROSTER."</a> | ";
+   echo "<a href='positions.php?teamid=".$teamid."'>"._MD_TEAMPOSOVERVIEW."</a> | <a href='avstats.php?teamid=".$teamid."'>"._MD_TEAMAVAILSTATS2."</a>";
    echo "</td></tr></table>";
    echo "<tr><td><table width='100%' border='0' cellpadding='4' cellspacing='1'>";
    if (isset($uid)) {
@@ -70,12 +70,12 @@ if ($xoopsUser) {
    $tertiary = $myteamstatus["tertiarypos"];
    $rank = getRank($rankid);
    echo "<tr class='head'><td><b>".$team->getVar('teamname')."</b></td><td></td></tr>";
-   echo "<tr class='even'><td>"._AM_TEAMPLAYERNAME."</td><td><a href='profile.php?uid=".$uid."'>".$user."</a></td>";
-   echo "<tr class='odd'><td>"._AM_TEAMPLAYERRANK."</td><td><font color='".$rank["color"]."'>".$rank["rank"]."</font></td>";
-   echo "<tr class='head'><td colspan=2><b>"._AM_TEAMPOSITIONS."</b></td>";
+   echo "<tr class='even'><td>"._MD_TEAMPLAYERNAME."</td><td><a href='profile.php?uid=".$uid."'>".$user."</a></td>";
+   echo "<tr class='odd'><td>"._MD_TEAMPLAYERRANK."</td><td><font color='".$rank["color"]."'>".$rank["rank"]."</font></td>";
+   echo "<tr class='head'><td colspan=2><b>"._MD_TEAMPOSITIONS."</b></td>";
    echo "<form method='post' action='mypositions.php' ENCTYPE=\"multipart/form-data\" NAME=\"Positions\">";
    echo "<input type='hidden' name='uid' value='".$uid."'>";
-   echo "<tr class='odd'><td>"._AM_TEAMPRIMARYPOSITION."</td><td>";
+   echo "<tr class='odd'><td>"._MD_TEAMPRIMARYPOSITION."</td><td>";
    echo "<SELECT name='primary'>";
    $teampos = $team->getPositions();
    foreach ( $teampos as $posid => $posname ) {
@@ -83,21 +83,21 @@ if ($xoopsUser) {
    }
    echo "</SELECT>";
    echo "</td></tr>";
-   echo "<tr class='even'><td>"._AM_TEAMSECONDARYPOSITION."</td><td>";
+   echo "<tr class='even'><td>"._MD_TEAMSECONDARYPOSITION."</td><td>";
    echo "<SELECT name='secondary'>";
    foreach ( $teampos as $posid => $posname ) {
         echo "<OPTION value=".$posid." ".selectcheck($secondary,$posid).">".$posname."</OPTION>";
    }
    echo "</SELECT>";
    echo "</td></tr>";
-   echo "<tr class='odd'><td>"._AM_TEAMTERTIARYPOSITION."</td><td>";
-   echo "<SELECT name='tertiary'><OPTION value=null ".selectcheck($tertiary,null).">"._AM_TEAMNONE."</OPTION>";
+   echo "<tr class='odd'><td>"._MD_TEAMTERTIARYPOSITION."</td><td>";
+   echo "<SELECT name='tertiary'><OPTION value=null ".selectcheck($tertiary,null).">"._MD_TEAMNONE."</OPTION>";
    foreach ( $teampos as $posid => $posname ) {
         echo "<OPTION value=".$posid." ".selectcheck($tertiary,$posid).">".$posname."</OPTION>";
    }
    echo "</SELECT>";
    echo "</td></tr>";
-   echo "<tr class='head'><td colspan=2><b>"._AM_TEAMSKILLS.":</b></td></tr>";
+   echo "<tr class='head'><td colspan=2><b>"._MD_TEAMSKILLS.":</b></td></tr>";
    $teamskills = $team->getSkills();
    foreach ($teamskills as $skillid => $skillname) {
        if ((isset($class))&&($class=="even")) {
@@ -117,7 +117,7 @@ if ($xoopsUser) {
   }
 }
 else {
-     redirect_header("../../index.php",3,_AM_TEAMSORRYRESTRICTEDAREA);
+     redirect_header("../../index.php",3,_MD_TEAMSORRYRESTRICTEDAREA);
 }
 include_once(XOOPS_ROOT_PATH."/footer.php");
 ?>

@@ -34,7 +34,7 @@ if (is_object($xoopsUser)) {
 	}
 	$xoopsTpl->assign('user_ownpage', false);
 }
-$myts =& MyTextSanitizer::getInstance();
+$myts = MyTextSanitizer::getInstance();
 if (is_object($xoopsUser) && $xoopsUser->isAdmin()) {
 	$xoopsTpl->assign('user_uid', $thisUser->getVar('uid'));
 }
